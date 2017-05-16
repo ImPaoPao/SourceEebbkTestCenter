@@ -14,11 +14,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <uses-library android:name="android.test.runner" />
     </application>
     <instrumentation
         android:name="android.support.test.runner.AndroidJUnitRunner"
         android:label="Tests for com.eebbk.test.performance"
-        android:targetPackage="com.eebbk.test.performance"></instrumentation>
+        android:targetPackage="com.eebbk.test.performance">
+    </instrumentation>
 </manifest>

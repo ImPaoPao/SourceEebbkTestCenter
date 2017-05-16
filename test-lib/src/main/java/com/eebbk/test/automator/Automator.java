@@ -27,7 +27,7 @@ public class Automator {
         mHelper = new AutomatorHelper(mDevice);
 
         // Start from the home screen
-//        mHelper.unlock();
-//        mHelper.openLauncher();
+        mHelper.unlock();
+        mHelper.openLauncher();
     }
 }
