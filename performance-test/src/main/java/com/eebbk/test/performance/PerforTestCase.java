@@ -94,6 +94,8 @@ public class PerforTestCase extends Automator {
         }
         mStartTime = null;
     }
+
+
     public void stopTestRecord(String loadtime) {
         Log.i(TAG, "record endtime and infos");
         if (mStartTime != null) {
@@ -102,6 +104,26 @@ public class PerforTestCase extends Automator {
                 mXml.startTag(null, "Segment");
                 mXml.attribute(null, "starttime", mStartTime);
                 mXml.attribute(null, "loadtime", loadtime);
+                mXml.attribute(null, "endtime", getCurrentDate());
+                mXml.endTag(null, "Segment");
+            } catch (IOException e) {
+                // Nothing to do
+            }
+        }
+        mStartTime = null;
+    }
+    public void stopTestRecord(String loadtime, String startScreen, String endScreen, String compareTime, String compareResult) {
+        Log.i(TAG, "record endtime and infos");
+        if (mStartTime != null) {
+            try {
+                mXml.text("\n  ");
+                mXml.startTag(null, "Segment");
+                mXml.attribute(null, "starttime", mStartTime);
+                mXml.attribute(null, "loadtime", loadtime);
+                mXml.attribute(null, "startScreen", startScreen);
+                mXml.attribute(null, "endScreen", endScreen);
+                mXml.attribute(null, "compareTime", compareTime);
+                mXml.attribute(null, "compareResult", compareResult);
                 mXml.attribute(null, "endtime", getCurrentDate());
                 mXml.endTag(null, "Segment");
             } catch (IOException e) {

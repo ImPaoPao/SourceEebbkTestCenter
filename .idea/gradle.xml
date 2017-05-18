@@ -8,7 +8,7 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/perfomance-test" />
+            <option value="$PROJECT_DIR$/performance-test" />
             <option value="$PROJECT_DIR$/test-kit" />
             <option value="$PROJECT_DIR$/test-lib" />
           </set>
