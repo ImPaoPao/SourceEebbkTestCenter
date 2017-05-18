@@ -37,14 +37,16 @@ public class PerforTestCase extends Automator {
     private XmlSerializer mXml;
     private String mStartTime;
 
-    protected int mCount = 20;
+    protected int mCount = 1;
     protected int mType = 0;//0:冷启动 1:热启动
+    protected String mNumber = "unknown";
 
     @Before
     public void setUp() throws Exception {
         super.setUp();
         String count = getArguments().getString("count", "1");
         String type = getArguments().getString("type", "0");
+        mNumber = getArguments().getString("number", "unknown");
         if (TextUtils.isDigitsOnly(count)) {
             mCount = Integer.parseInt(count);
         }
@@ -52,8 +54,7 @@ public class PerforTestCase extends Automator {
             mType = Integer.parseInt(type);
         }
 
-        String number = getArguments().getString("number", "unknown");
-        File out = new File("/sdcard/performance-test/", number);
+        File out = new File("/sdcard/performance-test/", mNumber);
         if (out.exists()) {
             File[] files = out.listFiles();
             if (files != null) {

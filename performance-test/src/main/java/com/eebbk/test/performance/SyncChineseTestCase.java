@@ -17,8 +17,10 @@ import org.json.JSONException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Date;
 
 import static android.os.SystemClock.sleep;
 
@@ -26,18 +28,17 @@ import static android.os.SystemClock.sleep;
 public class SyncChineseTestCase extends PerforTestCase {
     @Test
     public void launchSyncChinese() throws IOException, UiObjectNotFoundException, JSONException, RemoteException {
-        //mType 0:冷启动
         BySelector synchinese = By.text("同步语文");
+        Bitmap source_png = getSourceScreen();
         for (int i = 0; i < mCount; i++) {
-            String startScreen;
-            String endScreen;
-            String compareTime;
+            String startScreen = "";
+            String endScreen = "";
+            String compareTime = "";
             int compareResult = 10;
             swipeCurrentLauncher();
-            mDevice.wait(Until.hasObject(By.text("同步语文")), WAIT_TIME);
+            mDevice.wait(Until.hasObject(synchinese), WAIT_TIME);
             UiObject2 synChineseObj = mDevice.findObject(synchinese);
-            FileInputStream source_fis = new FileInputStream("/sdcard/1.png");
-            Bitmap source_png = BitmapFactory.decodeStream(source_fis);
+            Date timeStamp1 = new Date();
             startTestRecord();
             //将源图片转换为Bitmap
             synChineseObj.clickAndWait(Until.newWindow(), WAIT_TIME);
@@ -47,15 +48,31 @@ public class SyncChineseTestCase extends PerforTestCase {
                 endScreen = getCurrentDate();
                 compareResult = BitmapHelper.compare(source_png, des_png);
                 compareTime = getCurrentDate();
+                if ((new Date().getTime() - timeStamp1.getTime()) > WAIT_TIME) {
+                    break;
+                }
             } while (compareResult >= 10);
             String loadTime = getCurrentDate();
-            //button
             mDevice.wait(Until.hasObject(By.res(SynChinese.PACKAGE, "refresh")), WAIT_TIME);
             stopTestRecord(loadTime, startScreen, endScreen, compareTime, String.valueOf(compareResult));
             mDevice.pressHome();
             clearRunprocess();
             sleep(1000);
-
         }
+    }
+
+    private Bitmap getSourceScreen() throws IOException {
+        BySelector synchinese = By.text("同步语文");
+        swipeCurrentLauncher();
+        mDevice.wait(Until.hasObject(synchinese), WAIT_TIME);
+        UiObject2 synChineseObj = mDevice.findObject(synchinese);
+        synChineseObj.clickAndWait(Until.newWindow(), WAIT_TIME);
+        mDevice.wait(Until.hasObject(By.res(SynChinese.PACKAGE, "refresh")), WAIT_TIME);
+        mDevice.takeScreenshot(new File("/sdcard/performance-test/" + mNumber + "/" + mNumber + ".png"));
+        FileInputStream source_fis = new FileInputStream("/sdcard/performance-test/" + mNumber + "/" + mNumber + ".png");
+        Bitmap source_png = BitmapFactory.decodeStream(source_fis);
+        mDevice.pressHome();
+        clearRunprocess();
+        return source_png;
     }
 }
