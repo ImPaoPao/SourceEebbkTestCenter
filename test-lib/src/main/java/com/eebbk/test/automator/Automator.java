@@ -1,5 +1,6 @@
 package com.eebbk.test.automator;
 
+import android.app.UiAutomation;
 import android.support.test.uiautomator.UiDevice;
 
 import org.junit.Before;
@@ -15,6 +16,7 @@ public class Automator {
     public static final int WAIT_TIME = 5000;
 
     protected UiDevice mDevice;
+    protected UiAutomation mAutomation;
     protected AutomatorHelper mHelper;
 
     @Before
@@ -22,6 +24,8 @@ public class Automator {
 
         // Initialize UiDevice instance
         mDevice = UiDevice.getInstance(getInstrumentation());
+
+        mAutomation = getInstrumentation().getUiAutomation();
 
         // Initialize AutomatorHelper instance
         mHelper = new AutomatorHelper(mDevice);
