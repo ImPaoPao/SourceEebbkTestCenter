@@ -28,6 +28,7 @@ import static android.os.SystemClock.sleep;
 public class SyncChineseTestCase extends PerforTestCase {
     @Test
     public void launchSyncChinese() throws IOException, UiObjectNotFoundException, JSONException, RemoteException {
+
         BySelector synchinese = By.text("同步语文");
         Bitmap source_png = getSourceScreen();
         for (int i = 0; i < mCount; i++) {
@@ -35,10 +36,10 @@ public class SyncChineseTestCase extends PerforTestCase {
             String endScreen = "";
             String compareTime = "";
             int compareResult = 10;
+            Date timeStamp1 = new Date();
             swipeCurrentLauncher();
             mDevice.wait(Until.hasObject(synchinese), WAIT_TIME);
             UiObject2 synChineseObj = mDevice.findObject(synchinese);
-            Date timeStamp1 = new Date();
             startTestRecord();
             //将源图片转换为Bitmap
             synChineseObj.clickAndWait(Until.newWindow(), WAIT_TIME);
