@@ -180,19 +180,27 @@ public class PerforTestCase extends Automator {
     }
 
 
-    protected Bitmap getHomeSourceScreen(BySelector bySelector, String startPackage, String widgetFlag,long waitTime) throws IOException, InterruptedException {
+    protected Bitmap getHomeSourceScreen(BySelector bySelector, String startPackage, String widgetFlag, long waitTime) throws IOException, InterruptedException {
         swipeCurrentLauncher();
         mDevice.wait(Until.hasObject(bySelector), WAIT_TIME);
         UiObject2 synChineseObj = mDevice.findObject(bySelector);
         synChineseObj.clickAndWait(Until.newWindow(), WAIT_TIME);
-        mDevice.wait(Until.hasObject(By.res(startPackage, widgetFlag)), WAIT_TIME);
-        sleep(waitTime);
+        if (widgetFlag == null) {
+            sleep(waitTime);
+        } else {
+            mDevice.wait(Until.hasObject(By.res(startPackage, widgetFlag)), WAIT_TIME);
+            sleep(waitTime);
+        }
         mDevice.takeScreenshot(new File("/sdcard/performance-test/" + mNumber + "/" + mNumber + ".png"));
         FileInputStream source_fis = new FileInputStream("/sdcard/performance-test/" + mNumber + "/" + mNumber + ".png");
         Bitmap source_png = BitmapFactory.decodeStream(source_fis);
         mDevice.pressHome();
         clearRunprocess();
         return source_png;
+    }
+
+    protected Bitmap getHomeSourceScreen(BySelector bySelector, String startPackage, long waitTime) throws IOException, InterruptedException {
+        return getHomeSourceScreen(bySelector, startPackage, null, waitTime);
     }
 
 }
