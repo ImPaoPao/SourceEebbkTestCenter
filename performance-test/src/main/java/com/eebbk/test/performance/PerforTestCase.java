@@ -1,6 +1,8 @@
 package com.eebbk.test.performance;
 
 import android.app.Instrumentation;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
@@ -21,6 +23,7 @@ import org.junit.runner.RunWith;
 import org.xmlpull.v1.XmlSerializer;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -28,6 +31,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import static android.support.test.InstrumentationRegistry.getArguments;
+import static java.lang.Thread.sleep;
 
 @RunWith(AndroidJUnit4.class)
 public class PerforTestCase extends Automator {
@@ -113,6 +117,7 @@ public class PerforTestCase extends Automator {
         }
         mStartTime = null;
     }
+
     public void stopTestRecord(String loadtime, String startScreen, String endScreen, String compareTime, String compareResult) {
         Log.i(TAG, "record endtime and infos");
         if (mStartTime != null) {
@@ -146,6 +151,7 @@ public class PerforTestCase extends Automator {
     }
 
     public void swipeCurrentLauncher() {
+        mDevice.pressHome();
         for (int j = 0; j < 3; j++)
             mDevice.swipe(mDevice.getDisplayWidth() / 2, mDevice.getDisplayHeight() / 2, 0, mDevice.getDisplayHeight() / 2, 20);
     }
@@ -171,6 +177,23 @@ public class PerforTestCase extends Automator {
         b.putString(Instrumentation.REPORT_KEY_STREAMRESULT, obj.toString());
         InstrumentationRegistry.getInstrumentation().sendStatus(0, b);
     }
+
+
+    protected Bitmap getHomeSourceScreen(BySelector bySelector, String startPackage, String widgetFlag,long waitTime) throws IOException, InterruptedException {
+        swipeCurrentLauncher();
+        mDevice.wait(Until.hasObject(bySelector), WAIT_TIME);
+        UiObject2 synChineseObj = mDevice.findObject(bySelector);
+        synChineseObj.clickAndWait(Until.newWindow(), WAIT_TIME);
+        mDevice.wait(Until.hasObject(By.res(startPackage, widgetFlag)), WAIT_TIME);
+        sleep(waitTime);
+        mDevice.takeScreenshot(new File("/sdcard/performance-test/" + mNumber + "/" + mNumber + ".png"));
+        FileInputStream source_fis = new FileInputStream("/sdcard/performance-test/" + mNumber + "/" + mNumber + ".png");
+        Bitmap source_png = BitmapFactory.decodeStream(source_fis);
+        mDevice.pressHome();
+        clearRunprocess();
+        return source_png;
+    }
+
 }
 
 

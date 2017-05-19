@@ -1,7 +1,6 @@
 package com.eebbk.test.performance;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.By;
 import android.support.test.uiautomator.BySelector;
@@ -17,20 +16,16 @@ import org.json.JSONObject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Date;
 
 @RunWith(AndroidJUnit4.class)
 public class BbkMiddleMarketTestCase extends PerforTestCase {
     @Test
-    public void launchBbkMiddleMarket() throws IOException, UiObjectNotFoundException, JSONException {
-        //mType 0:冷启动
+    public void launchBbkMiddleMarket() throws IOException, UiObjectNotFoundException, JSONException, InterruptedException {
         JSONObject obj = new JSONObject();
         BySelector bySynBbkMarket = By.text("应用商店");
-        Bitmap source_png = getSourceScreen(bySynBbkMarket);
-
+        Bitmap source_png = getHomeSourceScreen(bySynBbkMarket, BbkMiddleMarket.PACKAGE,"apk_button",2000);
         for (int i = 0; i < mCount; i++) {
             String startScreen = "";
             String endScreen = "";
@@ -58,19 +53,5 @@ public class BbkMiddleMarketTestCase extends PerforTestCase {
             mDevice.pressHome();
             clearRunprocess();
         }
-    }
-
-    private Bitmap getSourceScreen(BySelector bySelector) throws IOException {
-        swipeCurrentLauncher();
-        mDevice.wait(Until.hasObject(bySelector), WAIT_TIME);
-        UiObject2 synChineseObj = mDevice.findObject(bySelector);
-        synChineseObj.clickAndWait(Until.newWindow(), WAIT_TIME);
-        mDevice.wait(Until.hasObject(By.res(BbkMiddleMarket.PACKAGE, "apk_button")), WAIT_TIME);
-        mDevice.takeScreenshot(new File("/sdcard/performance-test/" + mNumber + "/" + mNumber + ".png"));
-        FileInputStream source_fis = new FileInputStream("/sdcard/performance-test/" + mNumber + "/" + mNumber + ".png");
-        Bitmap source_png = BitmapFactory.decodeStream(source_fis);
-        mDevice.pressHome();
-        clearRunprocess();
-        return source_png;
     }
 }
