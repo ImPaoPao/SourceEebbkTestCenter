@@ -16,10 +16,9 @@ import java.io.IOException;
 
 @RunWith(AndroidJUnit4.class)
 public class SyncEglishTestCase extends PerforTestCase {
-    //同步英语
+
     @Test
     public void launchSyncEnglish() throws IOException, UiObjectNotFoundException {
-        //mType 0:冷启动
         BySelector bySynEng = By.text("同步英语");
         for (int i = 0; i < mCount; i++) {
             swipeCurrentLauncher();

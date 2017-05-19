@@ -45,7 +45,7 @@ public class SyncChineseTestCase extends PerforTestCase {
                 endScreen = getCurrentDate();
                 compareResult = BitmapHelper.compare(source_png, des_png);
                 compareTime = getCurrentDate();
-                if ((new Date().getTime() - timeStamp1.getTime()) > WAIT_TIME) {
+                if ((new Date().getTime() - timeStamp1.getTime()) > WAIT_TIME*2) {
                     break;
                 }
             } while (compareResult >= 10);
