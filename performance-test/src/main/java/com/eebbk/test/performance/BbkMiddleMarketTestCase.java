@@ -26,6 +26,13 @@ public class BbkMiddleMarketTestCase extends PerforTestCase {
         JSONObject obj = new JSONObject();
         BySelector bySynBbkMarket = By.text("应用商店");
         Bitmap source_png = getHomeSourceScreen(bySynBbkMarket, BbkMiddleMarket.PACKAGE,"apk_button",2000);
+        //匹配度测试
+//        FileInputStream fis1 = new FileInputStream("/sdcard/performance-test/1.png");
+//        FileInputStream fis2 = new FileInputStream("/sdcard/performance-test/2.png");
+//        Bitmap png1= BitmapFactory.decodeStream(fis1);
+//        Bitmap png2= BitmapFactory.decodeStream(fis2);
+//        obj.put("compare result",BitmapHelper.compare(png1,png2));
+//        instrumentationStatusOut(obj);
         for (int i = 0; i < mCount; i++) {
             String startScreen = "";
             String endScreen = "";
