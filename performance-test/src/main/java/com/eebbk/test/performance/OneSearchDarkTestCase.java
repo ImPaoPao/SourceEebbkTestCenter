@@ -35,6 +35,7 @@ public class OneSearchDarkTestCase extends PerforTestCase {
             String compareTime = "";
             int compareResult = 10;
             Date timeStamp1 = new Date();
+
             swipeCurrentLauncher();
             mDevice.wait(Until.hasObject(byOneSearch), WAIT_TIME);
             UiObject2 oneSearch = mDevice.findObject(byOneSearch);
@@ -51,6 +52,7 @@ public class OneSearchDarkTestCase extends PerforTestCase {
                     break;
                 }
             } while (compareResult >= 10);
+
             String loadTime = getCurrentDate();
             mDevice.wait(Until.hasObject(By.res(OneSearchDark.PACKAGE, "btn_start_one_search")), WAIT_TIME);
             stopTestRecord(loadTime, startScreen, endScreen, compareTime, String.valueOf(compareResult));
