@@ -48,6 +48,7 @@ public class PerforTestCase extends Automator {
     @Before
     public void setUp() throws Exception {
         super.setUp();
+        clearRunprocess();
         String count = getArguments().getString("count", "1");
         String type = getArguments().getString("type", "0");
         mNumber = getArguments().getString("number", "unknown");
