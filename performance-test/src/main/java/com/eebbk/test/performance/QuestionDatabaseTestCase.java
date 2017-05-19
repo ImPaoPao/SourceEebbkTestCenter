@@ -59,6 +59,7 @@ public class QuestionDatabaseTestCase extends PerforTestCase {
             String loadTime = getCurrentDate();
             instrumentationStatusOut(obj);
             mDevice.wait(Until.hasObject(By.res(QuestionDatabase.PACKAGE, "exercise_main_default_banner")), WAIT_TIME);
+            sleep(3000);
             stopTestRecord(loadTime, startScreen, endScreen, compareTime, String.valueOf(compareResult));
             mDevice.pressHome();
             clearRunprocess();
