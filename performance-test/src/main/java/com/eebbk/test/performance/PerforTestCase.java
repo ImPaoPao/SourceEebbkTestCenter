@@ -30,8 +30,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import static android.os.SystemClock.sleep;
 import static android.support.test.InstrumentationRegistry.getArguments;
-import static java.lang.Thread.sleep;
 
 @RunWith(AndroidJUnit4.class)
 public class PerforTestCase extends Automator {

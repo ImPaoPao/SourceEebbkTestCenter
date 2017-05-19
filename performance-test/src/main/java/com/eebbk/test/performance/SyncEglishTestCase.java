@@ -19,7 +19,8 @@ import org.junit.runner.RunWith;
 import java.io.IOException;
 import java.util.Date;
 
-import static java.lang.Thread.sleep;
+import static android.os.SystemClock.sleep;
+
 
 @RunWith(AndroidJUnit4.class)
 public class SyncEglishTestCase extends PerforTestCase {
