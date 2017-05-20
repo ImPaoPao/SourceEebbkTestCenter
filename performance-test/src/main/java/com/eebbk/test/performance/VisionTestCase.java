@@ -33,7 +33,7 @@ public class VisionTestCase extends PerforTestCase {
             String startScreen = "";
             String endScreen = "";
             String compareTime = "";
-            int compareResult = 10;
+            int compareResult = 1;
             Date timeStamp1 = new Date();
             swipeCurrentLauncher();
             mDevice.wait(Until.hasObject(byVision), WAIT_TIME);
@@ -49,7 +49,7 @@ public class VisionTestCase extends PerforTestCase {
                 if ((new Date().getTime() - timeStamp1.getTime()) > WAIT_TIME) {
                     break;
                 }
-            } while (compareResult >= 10);
+            } while (compareResult >= 1);
             String loadTime = getCurrentDate();
             sleep(1000);
             stopTestRecord(loadTime, startScreen, endScreen, compareTime, String.valueOf(compareResult));
