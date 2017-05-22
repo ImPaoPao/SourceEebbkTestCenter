@@ -11,7 +11,6 @@ import android.support.test.uiautomator.Until;
 import com.eebbk.test.common.BitmapHelper;
 import com.eebbk.test.common.PackageConstants.EnglishTalk;
 
-import org.json.JSONObject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -24,9 +23,9 @@ import static android.os.SystemClock.sleep;
 public class EnglishTalkTestCase extends PerforTestCase {
     @Test
     public void launchEnglishTalk() throws IOException, UiObjectNotFoundException, InterruptedException {
-        JSONObject obj = new JSONObject();
         BySelector bySynEng = By.text("英语听说");
-        Bitmap source_png = getHomeSourceScreen(bySynEng, EnglishTalk.PACKAGE, "tab_view_root_id", 5000);
+        Bitmap source_png = Bitmap.createBitmap(getHomeSourceScreen(bySynEng, EnglishTalk.PACKAGE,
+                "tab_view_root_id", 5000), 0, 310, mDevice.getDisplayWidth(), mDevice.getDisplayHeight() - 310);
         for (int i = 0; i < mCount; i++) {
             String startScreen = "";
             String endScreen = "";
@@ -40,11 +39,10 @@ public class EnglishTalkTestCase extends PerforTestCase {
             synMath.clickAndWait(Until.newWindow(), WAIT_TIME);
             do {
                 startScreen = getCurrentDate();
-                Bitmap des_png = mAutomation.takeScreenshot();
+                Bitmap des_png = Bitmap.createBitmap(mAutomation.takeScreenshot(), 0, 310, mDevice
+                        .getDisplayWidth(), mDevice.getDisplayHeight() - 310);
                 endScreen = getCurrentDate();
-                compareResult = BitmapHelper.compare(Bitmap.createBitmap(source_png, 0, 310, mDevice.getDisplayWidth
-                        (), mDevice.getDisplayHeight() - 310), Bitmap.createBitmap(des_png, 0, 310, mDevice
-                        .getDisplayWidth(), mDevice.getDisplayHeight() - 310));
+                compareResult = BitmapHelper.compare(source_png, des_png);
                 compareTime = getCurrentDate();
                 if (!des_png.isRecycled()) {
                     des_png.recycle();
@@ -59,7 +57,6 @@ public class EnglishTalkTestCase extends PerforTestCase {
             stopTestRecord(loadTime, startScreen, endScreen, compareTime, String.valueOf(compareResult));
             mDevice.pressHome();
             clearRunprocess();
-            sleep(1000);
         }
         if (!source_png.isRecycled()) {
             source_png.recycle();
