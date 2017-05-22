@@ -31,7 +31,7 @@ public class EnglishTalkTestCase extends PerforTestCase {
             String startScreen = "";
             String endScreen = "";
             String compareTime = "";
-            int compareResult = 10;
+            int compareResult = 5;
             Date timeStamp1 = new Date();
             swipeCurrentLauncher();
             mDevice.wait(Until.hasObject(bySynEng), WAIT_TIME);
@@ -47,7 +47,7 @@ public class EnglishTalkTestCase extends PerforTestCase {
                 if ((new Date().getTime() - timeStamp1.getTime()) > WAIT_TIME*5) {
                     break;
                 }
-            } while (compareResult >= 10);
+            } while (compareResult >= 5);
             String loadTime = getCurrentDate();
             mDevice.wait(Until.hasObject(By.res(EnglishTalk.PACKAGE, "tab_view_root_id")), WAIT_TIME);
             sleep(3000);

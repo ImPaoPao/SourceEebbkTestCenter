@@ -27,7 +27,7 @@ public class VtrainingTestCase extends PerforTestCase {
             String startScreen = "";
             String endScreen = "";
             String compareTime = "";
-            int compareResult = 10;
+            int compareResult = 5;
             Date timeStamp1 = new Date();
             swipeCurrentLauncher();
             mDevice.wait(Until.hasObject(byVtrain), WAIT_TIME);
@@ -43,7 +43,7 @@ public class VtrainingTestCase extends PerforTestCase {
                 if ((new Date().getTime() - timeStamp1.getTime()) > WAIT_TIME*5) {
                     break;
                 }
-            } while (compareResult >= 10);
+            } while (compareResult >= 5);
             String loadTime = getCurrentDate();
             mDevice.wait(Until.hasObject(By.res(Vtraining.PACKAGE, "my_plan_banner_scale_id")), WAIT_TIME);
             stopTestRecord(loadTime, startScreen, endScreen, compareTime, String.valueOf(compareResult));

@@ -30,7 +30,7 @@ public class SyncMathTestCase extends PerforTestCase {
             String startScreen = "";
             String endScreen = "";
             String compareTime = "";
-            int compareResult = 10;
+            int compareResult = 5;
             Date timeStamp1 = new Date();
             swipeCurrentLauncher();
             mDevice.wait(Until.hasObject(bySynMath), WAIT_TIME);
@@ -43,10 +43,13 @@ public class SyncMathTestCase extends PerforTestCase {
                 endScreen = getCurrentDate();
                 compareResult = BitmapHelper.compare(source_png, des_png);
                 compareTime = getCurrentDate();
-                if ((new Date().getTime() - timeStamp1.getTime()) > WAIT_TIME) {
+                if(!des_png.isRecycled()){
+                    des_png.recycle();
+                }
+                if ((new Date().getTime() - timeStamp1.getTime()) > WAIT_TIME*2) {
                     break;
                 }
-            } while (compareResult >= 10);
+            } while (compareResult >=5);
             String loadTime = getCurrentDate();
             mDevice.wait(Until.hasObject(By.res(SynMath.PACKAGE, "refreshBtnId")), WAIT_TIME);
             stopTestRecord(loadTime, startScreen, endScreen, compareTime, String.valueOf(compareResult));

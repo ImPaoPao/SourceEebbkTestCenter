@@ -34,7 +34,7 @@ public class QuestionDatabaseTestCase extends PerforTestCase {
             String startScreen = "";
             String endScreen = "";
             String compareTime = "";
-            int compareResult = 10;
+            int compareResult = 5;
             Date timeStamp1 = new Date();
 
             swipeCurrentLauncher();
@@ -42,7 +42,6 @@ public class QuestionDatabaseTestCase extends PerforTestCase {
             UiObject2 questionDb = mDevice.findObject(byQuestionDb);
             startTestRecord();
             questionDb.clickAndWait(Until.newWindow(), WAIT_TIME);
-            sleep(1000);
             int m = 0;
             do {
                 startScreen = getCurrentDate();
@@ -51,11 +50,11 @@ public class QuestionDatabaseTestCase extends PerforTestCase {
                 compareResult = BitmapHelper.compare(source_png, des_png);
                 compareTime = getCurrentDate();
                 obj.put("compareResult:" + String.valueOf(m), compareResult);
-                if ((new Date().getTime() - timeStamp1.getTime()) > WAIT_TIME * 4) {
+                if ((new Date().getTime() - timeStamp1.getTime()) > WAIT_TIME * 5) {
                     obj.put("break========:" + String.valueOf(m), compareResult);
                     break;
                 }
-            } while (compareResult >= 10);
+            } while (compareResult >= 1);
             String loadTime = getCurrentDate();
             instrumentationStatusOut(obj);
             mDevice.wait(Until.hasObject(By.res(QuestionDatabase.PACKAGE, "exercise_main_default_banner")), WAIT_TIME);
