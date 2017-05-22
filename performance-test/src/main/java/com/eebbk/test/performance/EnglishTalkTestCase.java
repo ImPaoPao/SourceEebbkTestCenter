@@ -26,12 +26,12 @@ public class EnglishTalkTestCase extends PerforTestCase {
     public void launchEnglishTalk() throws IOException, UiObjectNotFoundException, InterruptedException {
         JSONObject obj = new JSONObject();
         BySelector bySynEng = By.text("英语听说");
-        Bitmap source_png = getHomeSourceScreen(bySynEng, EnglishTalk.PACKAGE,"tab_view_root_id",5000);
+        Bitmap source_png = getHomeSourceScreen(bySynEng, EnglishTalk.PACKAGE, "tab_view_root_id", 5000);
         for (int i = 0; i < mCount; i++) {
             String startScreen = "";
             String endScreen = "";
             String compareTime = "";
-            int compareResult = 5;
+            int compareResult = 10;
             Date timeStamp1 = new Date();
             swipeCurrentLauncher();
             mDevice.wait(Until.hasObject(bySynEng), WAIT_TIME);
@@ -42,9 +42,14 @@ public class EnglishTalkTestCase extends PerforTestCase {
                 startScreen = getCurrentDate();
                 Bitmap des_png = mAutomation.takeScreenshot();
                 endScreen = getCurrentDate();
-                compareResult = BitmapHelper.compare(source_png, des_png);
+                compareResult = BitmapHelper.compare(Bitmap.createBitmap(source_png, 0, 310, mDevice.getDisplayWidth
+                        (), mDevice.getDisplayHeight() - 310), Bitmap.createBitmap(des_png, 0, 310, mDevice
+                        .getDisplayWidth(), mDevice.getDisplayHeight() - 310));
                 compareTime = getCurrentDate();
-                if ((new Date().getTime() - timeStamp1.getTime()) > WAIT_TIME*5) {
+                if (!des_png.isRecycled()) {
+                    des_png.recycle();
+                }
+                if ((new Date().getTime() - timeStamp1.getTime()) > WAIT_TIME * 5) {
                     break;
                 }
             } while (compareResult >= 5);
@@ -55,6 +60,9 @@ public class EnglishTalkTestCase extends PerforTestCase {
             mDevice.pressHome();
             clearRunprocess();
             sleep(1000);
+        }
+        if (!source_png.isRecycled()) {
+            source_png.recycle();
         }
     }
 }

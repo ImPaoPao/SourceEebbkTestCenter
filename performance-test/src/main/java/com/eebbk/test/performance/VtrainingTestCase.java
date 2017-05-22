@@ -40,7 +40,10 @@ public class VtrainingTestCase extends PerforTestCase {
                 endScreen = getCurrentDate();
                 compareResult = BitmapHelper.compare(source_png, des_png);
                 compareTime = getCurrentDate();
-                if ((new Date().getTime() - timeStamp1.getTime()) > WAIT_TIME*5) {
+                if (!des_png.isRecycled()) {
+                    des_png.recycle();
+                }
+                if ((new Date().getTime() - timeStamp1.getTime()) > WAIT_TIME * 5) {
                     break;
                 }
             } while (compareResult >= 5);
@@ -49,6 +52,9 @@ public class VtrainingTestCase extends PerforTestCase {
             stopTestRecord(loadTime, startScreen, endScreen, compareTime, String.valueOf(compareResult));
             mDevice.pressHome();
             clearRunprocess();
+        }
+        if (!source_png.isRecycled()) {
+            source_png.recycle();
         }
     }
 }

@@ -49,6 +49,9 @@ public class QuestionDatabaseTestCase extends PerforTestCase {
                 endScreen = getCurrentDate();
                 compareResult = BitmapHelper.compare(source_png, des_png);
                 compareTime = getCurrentDate();
+                if(!des_png.isRecycled()){
+                    des_png.recycle();
+                }
                 obj.put("compareResult:" + String.valueOf(m), compareResult);
                 if ((new Date().getTime() - timeStamp1.getTime()) > WAIT_TIME * 5) {
                     obj.put("break========:" + String.valueOf(m), compareResult);
@@ -62,6 +65,9 @@ public class QuestionDatabaseTestCase extends PerforTestCase {
             stopTestRecord(loadTime, startScreen, endScreen, compareTime, String.valueOf(compareResult));
             mDevice.pressHome();
             clearRunprocess();
+        }
+        if(!source_png.isRecycled()){
+            source_png.recycle();
         }
     }
 }

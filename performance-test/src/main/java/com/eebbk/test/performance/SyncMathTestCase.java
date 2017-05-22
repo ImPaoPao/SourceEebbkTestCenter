@@ -46,7 +46,8 @@ public class SyncMathTestCase extends PerforTestCase {
                 if(!des_png.isRecycled()){
                     des_png.recycle();
                 }
-                if ((new Date().getTime() - timeStamp1.getTime()) > WAIT_TIME*2) {
+
+                if ((new Date().getTime() - timeStamp1.getTime()) > WAIT_TIME*4) {
                     break;
                 }
             } while (compareResult >=5);
@@ -55,6 +56,9 @@ public class SyncMathTestCase extends PerforTestCase {
             stopTestRecord(loadTime, startScreen, endScreen, compareTime, String.valueOf(compareResult));
             mDevice.pressHome();
             clearRunprocess();
+        }
+        if(!source_png.isRecycled()){
+            source_png.recycle();
         }
     }
 }

@@ -52,17 +52,24 @@ public class SyncEglishTestCase extends PerforTestCase {
                 compareResult = BitmapHelper.compare(source_png, des_png);
                 obj.put("compareResult"+String.valueOf(m),compareResult);
                 compareTime = getCurrentDate();
+                if(!des_png.isRecycled()){
+                    des_png.recycle();
+                }
+
                 if ((new Date().getTime() - timeStamp1.getTime()) > WAIT_TIME*5) {
                     obj.put("break========:"+String.valueOf(m),compareResult);
                     break;
                 }
-            } while (compareResult >= 10);
+            } while (compareResult >= 5);
             instrumentationStatusOut(obj);
             String loadTime = getCurrentDate();
             mDevice.wait(Until.hasObject(By.res(SyncEnglish.PACKAGE, "imageview_mainbookshelf_blackboard")), WAIT_TIME);
             stopTestRecord(loadTime, startScreen, endScreen, compareTime, String.valueOf(compareResult));
             mDevice.pressHome();
             clearRunprocess();
+        }
+        if(!source_png.isRecycled()){
+            source_png.recycle();
         }
     }
 }

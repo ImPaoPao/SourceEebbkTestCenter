@@ -24,9 +24,10 @@ import static android.os.SystemClock.sleep;
 @RunWith(AndroidJUnit4.class)
 public class SyncChineseTestCase extends PerforTestCase {
     @Test
-    public void launchSyncChinese() throws IOException, UiObjectNotFoundException, JSONException, RemoteException, InterruptedException {
+    public void launchSyncChinese() throws IOException, UiObjectNotFoundException, JSONException, RemoteException,
+            InterruptedException {
         BySelector synchinese = By.text("同步语文");
-        Bitmap source_png = getHomeSourceScreen(synchinese,SynChinese.PACKAGE,"refresh",0);
+        Bitmap source_png = getHomeSourceScreen(synchinese, SynChinese.PACKAGE, "refresh", 0);
         for (int i = 0; i < mCount; i++) {
             String startScreen = "";
             String endScreen = "";
@@ -45,16 +46,22 @@ public class SyncChineseTestCase extends PerforTestCase {
                 endScreen = getCurrentDate();
                 compareResult = BitmapHelper.compare(source_png, des_png);
                 compareTime = getCurrentDate();
-                if ((new Date().getTime() - timeStamp1.getTime()) > WAIT_TIME*2) {
+                if(!des_png.isRecycled()){
+                    des_png.recycle();
+                }
+                if ((new Date().getTime() - timeStamp1.getTime()) > WAIT_TIME * 4) {
                     break;
                 }
-            } while (compareResult >= 10);
+            } while (compareResult >= 5);
             String loadTime = getCurrentDate();
             mDevice.wait(Until.hasObject(By.res(SynChinese.PACKAGE, "refresh")), WAIT_TIME);
             stopTestRecord(loadTime, startScreen, endScreen, compareTime, String.valueOf(compareResult));
             mDevice.pressHome();
             clearRunprocess();
             sleep(1000);
+        }
+        if(!source_png.isRecycled()){
+            source_png.recycle();
         }
     }
 }

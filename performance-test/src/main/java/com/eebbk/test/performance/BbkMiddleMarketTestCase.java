@@ -32,20 +32,22 @@ public class BbkMiddleMarketTestCase extends PerforTestCase {
         JSONObject obj = new JSONObject();
         FileInputStream fis1 = new FileInputStream("/sdcard/performance-test/1.png");
         FileInputStream fis2 = new FileInputStream("/sdcard/performance-test/2.png");
-        Bitmap png1= BitmapFactory.decodeStream(fis1);
-        Bitmap png2= BitmapFactory.decodeStream(fis2);
-        obj.put("compare result",BitmapHelper.compare(png1,png2));
+        Bitmap png1 = BitmapFactory.decodeStream(fis1);
+        Bitmap png2 = BitmapFactory.decodeStream(fis2);
+        obj.put("compare result", BitmapHelper.compare(Bitmap.createBitmap(png1, 0, 310, mDevice.getDisplayWidth(),
+                mDevice.getDisplayHeight() - 310), Bitmap.createBitmap(png2, 0, 310, mDevice.getDisplayWidth(),
+                mDevice.getDisplayHeight() - 310)));
         instrumentationStatusOut(obj);
         stopTestRecord();
     }
 
 
     @Test
-    public void launchBbkMiddleMarket() throws IOException, UiObjectNotFoundException, JSONException, InterruptedException {
+    public void launchBbkMiddleMarket() throws IOException, UiObjectNotFoundException, JSONException,
+            InterruptedException {
         JSONObject obj = new JSONObject();
         BySelector bySynBbkMarket = By.text("应用商店");
-        Bitmap source_png = getHomeSourceScreen(bySynBbkMarket, BbkMiddleMarket.PACKAGE,"apk_button",2000);
-
+        Bitmap source_png = getHomeSourceScreen(bySynBbkMarket, BbkMiddleMarket.PACKAGE, "apk_button", 2000);
         for (int i = 0; i < mCount; i++) {
             String startScreen = "";
             String endScreen = "";
@@ -63,7 +65,10 @@ public class BbkMiddleMarketTestCase extends PerforTestCase {
                 endScreen = getCurrentDate();
                 compareResult = BitmapHelper.compare(source_png, des_png);
                 compareTime = getCurrentDate();
-                if ((new Date().getTime() - timeStamp1.getTime()) > WAIT_TIME*5) {
+                if (!des_png.isRecycled()) {
+                    des_png.recycle();
+                }
+                if ((new Date().getTime() - timeStamp1.getTime()) > WAIT_TIME * 5) {
                     break;
                 }
             } while (compareResult >= 5);
@@ -72,6 +77,9 @@ public class BbkMiddleMarketTestCase extends PerforTestCase {
             stopTestRecord(loadTime, startScreen, endScreen, compareTime, String.valueOf(compareResult));
             mDevice.pressHome();
             clearRunprocess();
+        }
+        if (!source_png.isRecycled()) {
+            source_png.recycle();
         }
     }
 }

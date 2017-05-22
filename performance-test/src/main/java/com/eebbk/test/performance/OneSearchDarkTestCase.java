@@ -46,8 +46,10 @@ public class OneSearchDarkTestCase extends PerforTestCase {
                 endScreen = getCurrentDate();
                 compareResult = BitmapHelper.compare(source_png, des_png);
                 compareTime = getCurrentDate();
-                obj.put("do "+String.valueOf(m),compareResult);
-                if ((new Date().getTime() - timeStamp1.getTime()) > WAIT_TIME*2) {
+                if(!des_png.isRecycled()){
+                    des_png.recycle();
+                }
+                if ((new Date().getTime() - timeStamp1.getTime()) > WAIT_TIME*5) {
                     obj.put("do "+String.valueOf(m),compareResult);
                     break;
                 }
@@ -58,6 +60,9 @@ public class OneSearchDarkTestCase extends PerforTestCase {
             instrumentationStatusOut(obj);
             mDevice.pressHome();
             clearRunprocess();
+        }
+        if(!source_png.isRecycled()){
+            source_png.recycle();
         }
     }
 }
