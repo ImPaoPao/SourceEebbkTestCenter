@@ -72,7 +72,7 @@ public class SyncEglishTestCase extends PerforTestCase {
 
     //前置条件：首页下载好十本书
     @Test
-    public void refreshEnglishBook() throws IOException, JSONException, InterruptedException {
+    public void synEnglishRefresh() throws IOException, JSONException, InterruptedException {
         JSONObject obj = new JSONObject();
         mHelper.openSyncEnglish();
         Bitmap source_png = mHelper.takeScreenshot(mNumber);
@@ -114,4 +114,41 @@ public class SyncEglishTestCase extends PerforTestCase {
         }
     }
 
+    //点击添加按钮→下载界面加载完成
+    @Test
+    public void addSyncEnglishBook() {
+
+    }
+
+    //点击书本→书本内容界面显示完成
+    @Test
+    public void showSyncEnglishBook() {
+
+    }
+
+    //书本内容界面点击头像→个人信息页面加载完成
+    @Test
+    public void syncEnglishSelfInfo() {
+
+    }
+    //书本内容界面点击趣味测验→测验页面内容加载完成
+    @Test
+    public void syncEnglishFunTest() {
+
+    }
+    //书本内容界面点击flash按钮→flas页面加载完成
+    @Test
+    public void syncEnglishFlash() {
+
+    }
+    //点读页面，点击句子选择单词--查，点击反查→词典列表弹出框加载完成
+    @Test
+    public void syncEnglishAccessDict() {
+
+    }
+    //趣味测验点击欧拉学英语→跳转到商店页面加载完成
+    @Test
+    public void syncEnglishOlaAccessBbkMarket() {
+
+    }
 }

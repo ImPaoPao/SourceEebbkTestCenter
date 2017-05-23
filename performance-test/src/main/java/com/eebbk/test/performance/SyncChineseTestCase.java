@@ -64,4 +64,43 @@ public class SyncChineseTestCase extends PerforTestCase {
             source_png.recycle();
         }
     }
+
+
+    //添加按钮 界面加载完成
+    @Test
+    public void addChineseBook(){
+
+    }
+
+    //点击书本→书本内容界面显示完成
+    @Test
+    public void showSynChineseBook(){
+
+    }
+    //点击教辅目录→进入课本详情
+    @Test
+    public void showDetailsSynChineseBook(){
+
+    }
+    //点击查字词→调转到词典界面
+    @Test
+    public void syncChineseAccessDict(){
+
+    }
+    //书本内容界面点击头像→个人信息页面加载完成
+    @Test
+    public void synChineseSelfInfo(){
+
+    }
+    //生字页面，点击一个生字，点击写一写→进入写一写界面
+    @Test
+    public void synChineseNewWord(){
+
+    }
+    //书架界面10本书，点击刷新→刷新完成
+    @Test
+    public void synChineseRefresh(){
+
+    }
+
 }
