@@ -265,6 +265,14 @@ public class AutomatorHelper {
 
     public void openSyncEnglish() {
         openIcon("同步英语", SyncEnglish.PACKAGE);
+        mDevice.waitForIdle();
+        if(mDevice.wait(Until.hasObject(By.res(SyncEnglish.PACKAGE, "change_book_layout_id")), WAIT_TIME*2)){
+            UiObject2 changBook = mDevice.findObject(By.res(SyncEnglish.PACKAGE, "change_book_layout_id"));
+            if (changBook != null) {
+                changBook.click();
+                mDevice.wait(Until.hasObject(By.res(SyncEnglish.PACKAGE, "refresh")), WAIT_TIME);
+            }
+        }
     }
 
     public void openSynChinese() {

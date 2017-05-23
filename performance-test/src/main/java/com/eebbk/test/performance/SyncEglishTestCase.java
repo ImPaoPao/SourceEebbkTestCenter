@@ -25,25 +25,6 @@ import static android.os.SystemClock.sleep;
 @RunWith(AndroidJUnit4.class)
 public class SyncEglishTestCase extends PerforTestCase {
     BySelector bySelector = By.text("同步英语");
-    @Override
-    public void setUp() throws Exception {
-        super.setUp();
-        openEnglishTalkHome();
-    }
-
-    private void openEnglishTalkHome() {
-        mHelper.openSyncEnglish();
-        //open talk home
-//        swipeCurrentLauncher();
-//        mDevice.wait(Until.hasObject(bySelector), WAIT_TIME);
-//        UiObject2 clickObj = mDevice.findObject(bySelector);
-//        clickObj.clickAndWait(Until.newWindow(), WAIT_TIME);
-//        mDevice.wait(Until.hasObject(By.res(SyncEnglish.PACKAGE, "refresh")), WAIT_TIME*2);
-//        UiObject2 clickRefresh = mDevice.findObject(bySelector);
-//        clickRefresh.clickAndWait(Until.newWindow(),WAIT_TIME);
-//        mDevice.pressHome();
-    }
-
     @Test
     public void launchSyncEnglish() throws IOException, UiObjectNotFoundException, InterruptedException, JSONException {
         JSONObject obj = new JSONObject();
@@ -93,10 +74,13 @@ public class SyncEglishTestCase extends PerforTestCase {
         }
     }
 
+
+    //前置条件：首页下载好十本书
     @Test
-    public void refreshEnglishTalk() throws IOException, JSONException, InterruptedException {
+    public void refreshEnglishBook() throws IOException, JSONException, InterruptedException {
         JSONObject obj = new JSONObject();
         obj.put("refresh:","===========");
+        mHelper.openSyncEnglish();
 //        BySelector bySynEng = By.text("英语听说");
         //com.eebbk.syncenglish:id/refresh
 //        openEnglishTalkHome();
