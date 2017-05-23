@@ -119,7 +119,8 @@ public class PerforTestCase extends Automator {
         mStartTime = null;
     }
 
-    public void stopTestRecord(String loadtime, String startScreen, String endScreen, String compareTime, String compareResult) {
+    public void stopTestRecord(String loadtime, String startScreen, String endScreen, String compareTime, String
+            compareResult) {
         Log.i(TAG, "record endtime and infos");
         if (mStartTime != null) {
             try {
@@ -154,7 +155,8 @@ public class PerforTestCase extends Automator {
     public void swipeCurrentLauncher() {
         mDevice.pressHome();
         for (int j = 0; j < 3; j++)
-            mDevice.swipe(mDevice.getDisplayWidth() / 2, mDevice.getDisplayHeight() / 2, 0, mDevice.getDisplayHeight() / 2, 20);
+            mDevice.swipe(mDevice.getDisplayWidth() / 2, mDevice.getDisplayHeight() / 2, 0, mDevice.getDisplayHeight
+                    () / 2, 20);
     }
 
 
@@ -180,7 +182,8 @@ public class PerforTestCase extends Automator {
     }
 
 
-    protected Bitmap getHomeSourceScreen(BySelector bySelector, String startPackage, String widgetFlag, long waitTime) throws IOException, InterruptedException {
+    protected Bitmap getHomeSourceScreen(BySelector bySelector, String startPackage, String widgetFlag, long
+            waitTime) throws IOException, InterruptedException {
         swipeCurrentLauncher();
         mDevice.wait(Until.hasObject(bySelector), WAIT_TIME);
         UiObject2 synChineseObj = mDevice.findObject(bySelector);
@@ -192,14 +195,26 @@ public class PerforTestCase extends Automator {
             sleep(waitTime);
         }
         mDevice.takeScreenshot(new File("/sdcard/performance-test/" + mNumber + "/" + mNumber + ".png"));
-        FileInputStream source_fis = new FileInputStream("/sdcard/performance-test/" + mNumber + "/" + mNumber + ".png");
+        FileInputStream source_fis = new FileInputStream("/sdcard/performance-test/" + mNumber + "/" + mNumber + "" +
+                ".png");
         Bitmap source_png = BitmapFactory.decodeStream(source_fis);
         mDevice.pressHome();
         clearRunprocess();
         return source_png;
     }
 
-    protected Bitmap getHomeSourceScreen(BySelector bySelector, String startPackage, long waitTime) throws IOException, InterruptedException {
+
+    protected Bitmap getModuleSourceScreen(BySelector bySelector,String startPackage,String clickWidget,String
+            existWidget,long waitTime) {
+        Bitmap source_png = null;
+        swipeCurrentLauncher();
+
+        return source_png;
+    }
+
+
+    protected Bitmap getHomeSourceScreen(BySelector bySelector, String startPackage, long waitTime) throws
+            IOException, InterruptedException {
         return getHomeSourceScreen(bySelector, startPackage, null, waitTime);
     }
 

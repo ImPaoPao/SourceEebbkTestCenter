@@ -21,6 +21,7 @@ import static android.os.SystemClock.sleep;
 
 @RunWith(AndroidJUnit4.class)
 public class EnglishTalkTestCase extends PerforTestCase {
+
     @Test
     public void launchEnglishTalk() throws IOException, UiObjectNotFoundException, InterruptedException {
         BySelector bySynEng = By.text("英语听说");
@@ -62,4 +63,5 @@ public class EnglishTalkTestCase extends PerforTestCase {
             source_png.recycle();
         }
     }
+
 }

@@ -24,12 +24,32 @@ import static android.os.SystemClock.sleep;
 
 @RunWith(AndroidJUnit4.class)
 public class SyncEglishTestCase extends PerforTestCase {
+    BySelector bySelector = By.text("同步英语");
+    @Override
+    public void setUp() throws Exception {
+        super.setUp();
+        openEnglishTalkHome();
+    }
+
+    private void openEnglishTalkHome() {
+        mHelper.openSyncEnglish();
+        //open talk home
+//        swipeCurrentLauncher();
+//        mDevice.wait(Until.hasObject(bySelector), WAIT_TIME);
+//        UiObject2 clickObj = mDevice.findObject(bySelector);
+//        clickObj.clickAndWait(Until.newWindow(), WAIT_TIME);
+//        mDevice.wait(Until.hasObject(By.res(SyncEnglish.PACKAGE, "refresh")), WAIT_TIME*2);
+//        UiObject2 clickRefresh = mDevice.findObject(bySelector);
+//        clickRefresh.clickAndWait(Until.newWindow(),WAIT_TIME);
+//        mDevice.pressHome();
+    }
 
     @Test
     public void launchSyncEnglish() throws IOException, UiObjectNotFoundException, InterruptedException, JSONException {
         JSONObject obj = new JSONObject();
         BySelector bySynEng = By.text("同步英语");
-        Bitmap source_png = getHomeSourceScreen(bySynEng, SyncEnglish.PACKAGE,"imageview_mainbookshelf_blackboard",5000);
+        Bitmap source_png = getHomeSourceScreen(bySynEng, SyncEnglish.PACKAGE, "imageview_mainbookshelf_blackboard",
+                5000);
         for (int i = 0; i < mCount; i++) {
             String startScreen = "";
             String endScreen = "";
@@ -43,21 +63,21 @@ public class SyncEglishTestCase extends PerforTestCase {
             startTestRecord();
             synMath.clickAndWait(Until.newWindow(), WAIT_TIME);
             sleep(1000);
-            int m =0;
+            int m = 0;
             do {
                 m++;
                 startScreen = getCurrentDate();
                 Bitmap des_png = mAutomation.takeScreenshot();
                 endScreen = getCurrentDate();
                 compareResult = BitmapHelper.compare(source_png, des_png);
-                obj.put("compareResult"+String.valueOf(m),compareResult);
+                obj.put("compareResult" + String.valueOf(m), compareResult);
                 compareTime = getCurrentDate();
-                if(!des_png.isRecycled()){
+                if (!des_png.isRecycled()) {
                     des_png.recycle();
                 }
 
-                if ((new Date().getTime() - timeStamp1.getTime()) > WAIT_TIME*5) {
-                    obj.put("break========:"+String.valueOf(m),compareResult);
+                if ((new Date().getTime() - timeStamp1.getTime()) > WAIT_TIME * 5) {
+                    obj.put("break========:" + String.valueOf(m), compareResult);
                     break;
                 }
             } while (compareResult >= 5);
@@ -68,8 +88,55 @@ public class SyncEglishTestCase extends PerforTestCase {
             mDevice.pressHome();
             clearRunprocess();
         }
-        if(!source_png.isRecycled()){
+        if (!source_png.isRecycled()) {
             source_png.recycle();
         }
     }
+
+    @Test
+    public void refreshEnglishTalk() throws IOException, JSONException, InterruptedException {
+        JSONObject obj = new JSONObject();
+        obj.put("refresh:","===========");
+//        BySelector bySynEng = By.text("英语听说");
+        //com.eebbk.syncenglish:id/refresh
+//        openEnglishTalkHome();
+//        Bitmap source_png = Bitmap.createBitmap(getHomeSourceScreen(bySynEng, EnglishTalk.PACKAGE,
+//                "refresh", 5000), mDevice.getDisplayWidth()
+//                / 2 - 30, mDevice.getDisplayHeight() / 2 - 30, 60, 60);
+//        sleep(5000);
+//        for (int i = 0; i < mCount; i++) {
+//            String startScreen = "";
+//            String endScreen = "";
+//            String compareTime = "";
+//            int compareResult = 10;
+//            Date timeStamp1 = new Date();
+//            startTestRecord();
+//            mDevice.click(mDevice.getDisplayWidth() * 16 / 100, mDevice.getDisplayHeight() * 8 / 100);
+//            int m = 0;
+//            do {
+//                m++;
+//                startScreen = getCurrentDate();
+//                Bitmap des_png = Bitmap.createBitmap(mAutomation.takeScreenshot(), mDevice.getDisplayWidth()
+//                        / 2 - 30, mDevice.getDisplayHeight() / 2 - 30, 60, 60);
+//                endScreen = getCurrentDate();
+//                compareResult = BitmapHelper.compare(source_png, des_png);
+//                compareTime = getCurrentDate();
+//                obj.put("compare:" + String.valueOf(m), compareResult);
+//                if (!des_png.isRecycled()) {
+//                    des_png.recycle();
+//                }
+//                if ((new Date().getTime() - timeStamp1.getTime()) > WAIT_TIME * 5) {
+//                    break;
+//                }
+//            } while (compareResult >= 5);
+//            String loadTime = getCurrentDate();
+//            stopTestRecord(loadTime, startScreen, endScreen, compareTime, String.valueOf(compareResult));
+//            mDevice.waitForIdle();
+//            instrumentationStatusOut(obj);
+//        }
+//        if (!source_png.isRecycled()) {
+//            source_png.recycle();
+//        }
+    }
+
 }

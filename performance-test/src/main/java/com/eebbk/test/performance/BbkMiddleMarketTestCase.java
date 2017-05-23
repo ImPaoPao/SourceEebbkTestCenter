@@ -32,11 +32,14 @@ public class BbkMiddleMarketTestCase extends PerforTestCase {
         JSONObject obj = new JSONObject();
         FileInputStream fis1 = new FileInputStream("/sdcard/performance-test/1.png");
         FileInputStream fis2 = new FileInputStream("/sdcard/performance-test/2.png");
-        Bitmap png1 = BitmapFactory.decodeStream(fis1);
-        Bitmap png2 = BitmapFactory.decodeStream(fis2);
-        obj.put("compare result", BitmapHelper.compare(Bitmap.createBitmap(png1, 0, 310, mDevice.getDisplayWidth(),
-                mDevice.getDisplayHeight() - 310), Bitmap.createBitmap(png2, 0, 310, mDevice.getDisplayWidth(),
-                mDevice.getDisplayHeight() - 310)));
+        Bitmap png1 = Bitmap.createBitmap(BitmapFactory.decodeStream(fis1),mDevice.getDisplayWidth()
+                / 2 - 30, mDevice.getDisplayHeight() / 2 - 30, 60, 60);
+        Bitmap png2 = Bitmap.createBitmap(BitmapFactory.decodeStream(fis2),mDevice.getDisplayWidth()
+                / 2 - 30, mDevice.getDisplayHeight() / 2 - 30, 60, 60);
+//        obj.put("compare result", BitmapHelper.compare(Bitmap.createBitmap(png1, 0, 310, mDevice.getDisplayWidth(),
+//                mDevice.getDisplayHeight() - 310), Bitmap.createBitmap(png2, 0, 310, mDevice.getDisplayWidth(),
+//                mDevice.getDisplayHeight() - 310)));
+        obj.put("compare result", BitmapHelper.compare(png1,png2));
         instrumentationStatusOut(obj);
         stopTestRecord();
     }
