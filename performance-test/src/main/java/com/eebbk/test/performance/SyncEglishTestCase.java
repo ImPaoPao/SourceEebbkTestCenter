@@ -17,6 +17,7 @@ import org.json.JSONObject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Date;
 
@@ -75,6 +76,7 @@ public class SyncEglishTestCase extends PerforTestCase {
     public void synEnglishRefresh() throws IOException, JSONException, InterruptedException {
         JSONObject obj = new JSONObject();
         mHelper.openSyncEnglish();
+        mDevice.wait(Until.hasObject(By.res(SyncEnglish.PACKAGE, "refresh")), WAIT_TIME);
         Bitmap source_png = mHelper.takeScreenshot(mNumber);
         UiObject2 refresh = mDevice.findObject(By.res(SyncEnglish.PACKAGE, "refresh"));
         for (int i = 0; i < mCount; i++) {
@@ -116,8 +118,53 @@ public class SyncEglishTestCase extends PerforTestCase {
 
     //点击添加按钮→下载界面加载完成
     @Test
-    public void addSyncEnglishBook() {
+    public void addSyncEnglishBook() throws FileNotFoundException, JSONException {
+        JSONObject obj = new JSONObject();
+        //获取屏幕截图
+        mHelper.openSyncEnglish();
+        mDevice.wait(Until.hasObject(By.res(SyncEnglish.PACKAGE, "add_id")), WAIT_TIME);
+        UiObject2 add = mDevice.findObject(By.res(SyncEnglish.PACKAGE, "add_id"));
+        add.clickAndWait(Until.newWindow(), WAIT_TIME);
+        mDevice.wait(Until.hasObject(By.res(SyncEnglish.PACKAGE, "book_list")), WAIT_TIME);
+        Bitmap source_png = mHelper.takeScreenshot(mNumber);
 
+        for (int i = 0; i < mCount; i++) {
+            String startScreen = "";
+            String endScreen = "";
+            String compareTime = "";
+            int compareResult = 10;
+            Date timeStamp1 = new Date();
+            mHelper.openSyncEnglish();
+            mDevice.wait(Until.hasObject(By.res(SyncEnglish.PACKAGE, "add_id")), WAIT_TIME);
+            UiObject2 add2 = mDevice.findObject(By.res(SyncEnglish.PACKAGE, "add_id"));
+            startTestRecord();
+            add2.clickAndWait(Until.newWindow(), WAIT_TIME);
+            int m = 0;
+            do {
+                m++;
+                startScreen = getCurrentDate();
+                Bitmap des_png = Bitmap.createBitmap(mAutomation.takeScreenshot(), mDevice.getDisplayWidth()
+                        / 2 -100, mDevice.getDisplayHeight() / 2 - 100, 100, 100);
+                endScreen = getCurrentDate();
+                compareResult = BitmapHelper.compare(Bitmap.createBitmap(source_png, mDevice.getDisplayWidth()
+                        / 2 - 100, mDevice.getDisplayHeight() / 2 - 100, 100, 100), des_png);
+                compareTime = getCurrentDate();
+                obj.put("compare:" + String.valueOf(m), compareResult);
+                if (!des_png.isRecycled()) {
+                    des_png.recycle();
+                }
+                if ((new Date().getTime() - timeStamp1.getTime()) > WAIT_TIME * 5) {
+                    break;
+                }
+            } while (compareResult >= 1);
+            String loadTime = getCurrentDate();
+            stopTestRecord(loadTime, startScreen, endScreen, compareTime, String.valueOf(compareResult));
+            mDevice.waitForIdle();
+            instrumentationStatusOut(obj);
+        }
+        if (!source_png.isRecycled()) {
+            source_png.recycle();
+        }
     }
 
     //点击书本→书本内容界面显示完成

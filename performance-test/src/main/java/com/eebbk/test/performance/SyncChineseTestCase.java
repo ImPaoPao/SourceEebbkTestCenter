@@ -46,7 +46,7 @@ public class SyncChineseTestCase extends PerforTestCase {
                 endScreen = getCurrentDate();
                 compareResult = BitmapHelper.compare(source_png, des_png);
                 compareTime = getCurrentDate();
-                if(!des_png.isRecycled()){
+                if (!des_png.isRecycled()) {
                     des_png.recycle();
                 }
                 if ((new Date().getTime() - timeStamp1.getTime()) > WAIT_TIME * 4) {
@@ -60,7 +60,7 @@ public class SyncChineseTestCase extends PerforTestCase {
             clearRunprocess();
             sleep(1000);
         }
-        if(!source_png.isRecycled()){
+        if (!source_png.isRecycled()) {
             source_png.recycle();
         }
     }
@@ -68,38 +68,43 @@ public class SyncChineseTestCase extends PerforTestCase {
 
     //添加按钮 界面加载完成
     @Test
-    public void addChineseBook(){
+    public void addChineseBook() {
 
     }
 
     //点击书本→书本内容界面显示完成
     @Test
-    public void showSynChineseBook(){
+    public void showSynChineseBook() {
 
     }
+
     //点击教辅目录→进入课本详情
     @Test
-    public void showDetailsSynChineseBook(){
+    public void showDetailsSynChineseBook() {
 
     }
+
     //点击查字词→调转到词典界面
     @Test
-    public void syncChineseAccessDict(){
+    public void syncChineseAccessDict() {
 
     }
+
     //书本内容界面点击头像→个人信息页面加载完成
     @Test
-    public void synChineseSelfInfo(){
+    public void synChineseSelfInfo() {
 
     }
+
     //生字页面，点击一个生字，点击写一写→进入写一写界面
     @Test
-    public void synChineseNewWord(){
+    public void synChineseNewWord() {
 
     }
+
     //书架界面10本书，点击刷新→刷新完成
     @Test
-    public void synChineseRefresh(){
+    public void synChineseRefresh() {
 
     }
 

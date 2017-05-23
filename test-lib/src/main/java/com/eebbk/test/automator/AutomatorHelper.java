@@ -280,7 +280,7 @@ public class AutomatorHelper {
             UiObject2 changBook = mDevice.findObject(By.res(SyncEnglish.PACKAGE, "change_book_layout_id"));
             if (changBook != null) {
                 changBook.click();
-                mDevice.wait(Until.hasObject(By.res(SyncEnglish.PACKAGE, "refresh")), WAIT_TIME);
+                mDevice.waitForIdle();
             }
         }
     }
