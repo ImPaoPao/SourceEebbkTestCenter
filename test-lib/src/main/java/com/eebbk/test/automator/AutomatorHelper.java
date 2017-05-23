@@ -138,9 +138,10 @@ public class AutomatorHelper {
         return getBitmap(obj.getVisibleBounds());
     }
 
-    public Bitmap takeScreenshot(String fileName ) throws FileNotFoundException {
+    public Bitmap takeScreenshot(String fileName) throws FileNotFoundException {
         mDevice.takeScreenshot(new File("/sdcard/performance-test/" + fileName + "/" + fileName + ".png"));
-        FileInputStream source_fis = new FileInputStream("/sdcard/performance-test/"+fileName+"/"+fileName+".png");
+        FileInputStream source_fis = new FileInputStream("/sdcard/performance-test/" + fileName + "/" + fileName + "" +
+                ".png");
         Bitmap source_png = BitmapFactory.decodeStream(source_fis);
         return source_png;
     }
@@ -187,10 +188,11 @@ public class AutomatorHelper {
                 for (int i = children.size() - 1; i > 0; i--) {
                     if (children.get(i).isChecked()) {
                         flag = i;
+                        break;
                     }
                 }
                 if (flag <= children.size() / 2) {
-                    for (int j = 0; j < flag; j++) {
+                    for (int j = 0; j < children.size() - flag; j++) {
                         SystemClock.sleep(1500);
                         label = mDevice.findObject(By.text(title));
                         if (label != null) {
@@ -209,9 +211,7 @@ public class AutomatorHelper {
                         }
                         mDevice.swipe(mDevice.getDisplayWidth() / 2, mDevice.getDisplayHeight() / 2, mDevice
                                 .getDisplayWidth(), mDevice.getDisplayHeight() / 2, 20);
-
                     }
-
                 }
             }
         }
@@ -276,7 +276,7 @@ public class AutomatorHelper {
     public void openSyncEnglish() {
         openIcon("同步英语", SyncEnglish.PACKAGE);
         mDevice.waitForIdle();
-        if(mDevice.wait(Until.hasObject(By.res(SyncEnglish.PACKAGE, "change_book_layout_id")), WAIT_TIME*2)){
+        if (mDevice.wait(Until.hasObject(By.res(SyncEnglish.PACKAGE, "change_book_layout_id")), WAIT_TIME * 2)) {
             UiObject2 changBook = mDevice.findObject(By.res(SyncEnglish.PACKAGE, "change_book_layout_id"));
             if (changBook != null) {
                 changBook.click();
