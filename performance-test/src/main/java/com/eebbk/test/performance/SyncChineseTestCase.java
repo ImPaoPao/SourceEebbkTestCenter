@@ -33,10 +33,10 @@ public class SyncChineseTestCase extends PerforTestCase {
             String endScreen = "";
             String compareTime = "";
             int compareResult = 10;
-            Date timeStamp1 = new Date();
             swipeCurrentLauncher();
             mDevice.wait(Until.hasObject(synchinese), WAIT_TIME);
             UiObject2 synChineseObj = mDevice.findObject(synchinese);
+            Date timeStamp1 = new Date();
             startTestRecord();
             //将源图片转换为Bitmap
             synChineseObj.clickAndWait(Until.newWindow(), WAIT_TIME);

@@ -44,7 +44,7 @@ public class PackageConstants {
 
     //英语听说 com.eebbk.englishtalk
     public static final class EnglishTalk {
-        public static final String PACKAGE = "测";
+        public static final String PACKAGE = "英语听说";
         public static final PackageResources R = new PackageResources(getTargetContext(), PACKAGE);
     }
 

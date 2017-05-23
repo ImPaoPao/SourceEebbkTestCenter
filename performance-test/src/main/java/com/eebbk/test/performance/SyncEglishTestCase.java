@@ -17,7 +17,6 @@ import org.json.JSONObject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Date;
 
@@ -36,10 +35,10 @@ public class SyncEglishTestCase extends PerforTestCase {
             String endScreen = "";
             String compareTime = "";
             int compareResult = 10;
-            Date timeStamp1 = new Date();
             swipeCurrentLauncher();
             mDevice.wait(Until.hasObject(bySelector), WAIT_TIME);
             UiObject2 synMath = mDevice.findObject(bySelector);
+            Date timeStamp1 = new Date();
             startTestRecord();
             synMath.clickAndWait(Until.newWindow(), WAIT_TIME);
             int m = 0;
@@ -70,16 +69,15 @@ public class SyncEglishTestCase extends PerforTestCase {
         }
     }
 
-
     //前置条件：首页下载好十本书
     @Test
     public void synEnglishRefresh() throws IOException, JSONException, InterruptedException {
         JSONObject obj = new JSONObject();
         mHelper.openSyncEnglish();
-        mDevice.wait(Until.hasObject(By.res(SyncEnglish.PACKAGE, "refresh")), WAIT_TIME);
-        Bitmap source_png = mHelper.takeScreenshot(mNumber);
         UiObject2 refresh = mDevice.findObject(By.res(SyncEnglish.PACKAGE, "refresh"));
-        for (int i = 0; i < mCount; i++) {
+        Bitmap source_png = mHelper.takeScreenshot(mNumber);
+        SystemClock.sleep(1000);
+        for (int i = 0; i < 3; i++) {
             String startScreen = "";
             String endScreen = "";
             String compareTime = "";
@@ -98,7 +96,7 @@ public class SyncEglishTestCase extends PerforTestCase {
                 compareResult = BitmapHelper.compare(Bitmap.createBitmap(source_png, mDevice.getDisplayWidth()
                         / 2 - 30, mDevice.getDisplayHeight() / 2 - 30, 60, 60), des_png);
                 compareTime = getCurrentDate();
-                obj.put("compare:" + String.valueOf(m), compareResult);
+                obj.put("compare:" + String.valueOf(m)+String.valueOf(i), compareResult);
                 if (!des_png.isRecycled()) {
                     des_png.recycle();
                 }
@@ -109,34 +107,34 @@ public class SyncEglishTestCase extends PerforTestCase {
             String loadTime = getCurrentDate();
             stopTestRecord(loadTime, startScreen, endScreen, compareTime, String.valueOf(compareResult));
             mDevice.waitForIdle();
+            SystemClock.sleep(1000);
             instrumentationStatusOut(obj);
         }
         if (!source_png.isRecycled()) {
             source_png.recycle();
         }
     }
-
     //点击添加按钮→下载界面加载完成
     @Test
-    public void addSyncEnglishBook() throws FileNotFoundException, JSONException {
+    public void addSyncEnglishBook() throws IOException, JSONException {
         JSONObject obj = new JSONObject();
         //获取屏幕截图
         mHelper.openSyncEnglish();
-        mDevice.wait(Until.hasObject(By.res(SyncEnglish.PACKAGE, "add_id")), WAIT_TIME);
         UiObject2 add = mDevice.findObject(By.res(SyncEnglish.PACKAGE, "add_id"));
         add.clickAndWait(Until.newWindow(), WAIT_TIME);
-        mDevice.wait(Until.hasObject(By.res(SyncEnglish.PACKAGE, "book_list")), WAIT_TIME);
+        mDevice.wait(Until.hasObject(By.res(SyncEnglish.PACKAGE, "iv_cover")), WAIT_TIME*5);
         Bitmap source_png = mHelper.takeScreenshot(mNumber);
-
+        SystemClock.sleep(1000);
+        clearRunprocess();
         for (int i = 0; i < mCount; i++) {
             String startScreen = "";
             String endScreen = "";
             String compareTime = "";
-            int compareResult = 10;
-            Date timeStamp1 = new Date();
+            int compareResult = 1;
             mHelper.openSyncEnglish();
             mDevice.wait(Until.hasObject(By.res(SyncEnglish.PACKAGE, "add_id")), WAIT_TIME);
             UiObject2 add2 = mDevice.findObject(By.res(SyncEnglish.PACKAGE, "add_id"));
+            Date timeStamp1 = new Date();
             startTestRecord();
             add2.clickAndWait(Until.newWindow(), WAIT_TIME);
             int m = 0;
@@ -160,6 +158,7 @@ public class SyncEglishTestCase extends PerforTestCase {
             String loadTime = getCurrentDate();
             stopTestRecord(loadTime, startScreen, endScreen, compareTime, String.valueOf(compareResult));
             mDevice.waitForIdle();
+            mDevice.pressBack();
             instrumentationStatusOut(obj);
         }
         if (!source_png.isRecycled()) {

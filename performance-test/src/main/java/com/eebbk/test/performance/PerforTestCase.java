@@ -142,6 +142,8 @@ public class PerforTestCase extends Automator {
     }
 
     public void clearRunprocess() throws IOException {
+        mDevice.pressHome();
+        mDevice.waitForIdle();
         mDevice.executeShellCommand("am start -W com.android.systemui/.recents.RecentsActivity");
         mDevice.waitForIdle();
         BySelector cleanAll = By.res("com.android.systemui", "clean_all");
