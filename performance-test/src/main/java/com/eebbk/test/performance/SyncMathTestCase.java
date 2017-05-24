@@ -61,4 +61,52 @@ public class SyncMathTestCase extends PerforTestCase {
             source_png.recycle();
         }
     }
+
+    //点击添加按钮→下载界面加载完成
+    @Test
+    public void addMathBook() {
+
+    }
+    //点击书本→书本目录加载完成
+    @Test
+    public void showSynMathBook() {
+
+    }
+
+    //进入课本目录界面，点击左边换书按钮→书架界面显示完成
+    @Test
+    public void changeSynMathBook() {
+
+    }
+
+    //进入课本目录界面，点击动画讲解→动画讲解界面加载完成
+    @Test
+    public void showExplanationSynMathContent() {
+
+    }
+
+    //进入课本目录界面，点击动画讲解右边的下载按钮→下载页面加载完成
+    @Test
+    public void downloadExplanatinSynMathContent() {
+
+    }
+
+    //点击教辅目录→进入课本详情
+    @Test
+    public void showDetailsSynMathBook() {
+
+    }
+
+    //书架界面10本书，点击刷新→刷新完成
+    @Test
+    public void refreshSynMath() {
+
+    }
+
+
+    //书本内容界面，点击左上角目录按钮，点击知识讲解→知识讲解内容加载完成
+    @Test
+    public void showExplanationSynMathBook() {
+
+    }
 }

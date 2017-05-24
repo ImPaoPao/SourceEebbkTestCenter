@@ -8,6 +8,7 @@ import android.support.test.uiautomator.BySelector;
 import android.support.test.uiautomator.UiObject2;
 import android.support.test.uiautomator.UiObjectNotFoundException;
 import android.support.test.uiautomator.Until;
+import android.widget.ListView;
 
 import com.eebbk.test.common.BitmapHelper;
 import com.eebbk.test.common.PackageConstants.SyncEnglish;
@@ -19,6 +20,7 @@ import org.junit.runner.RunWith;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 
 
 @RunWith(AndroidJUnit4.class)
@@ -96,7 +98,7 @@ public class SyncEglishTestCase extends PerforTestCase {
                 compareResult = BitmapHelper.compare(Bitmap.createBitmap(source_png, mDevice.getDisplayWidth()
                         / 2 - 30, mDevice.getDisplayHeight() / 2 - 30, 60, 60), des_png);
                 compareTime = getCurrentDate();
-                obj.put("compare:" + String.valueOf(m)+String.valueOf(i), compareResult);
+                obj.put("compare:" + String.valueOf(m) + String.valueOf(i), compareResult);
                 if (!des_png.isRecycled()) {
                     des_png.recycle();
                 }
@@ -114,6 +116,7 @@ public class SyncEglishTestCase extends PerforTestCase {
             source_png.recycle();
         }
     }
+
     //点击添加按钮→下载界面加载完成
     @Test
     public void addSyncEnglishBook() throws IOException, JSONException {
@@ -122,7 +125,7 @@ public class SyncEglishTestCase extends PerforTestCase {
         mHelper.openSyncEnglish();
         UiObject2 add = mDevice.findObject(By.res(SyncEnglish.PACKAGE, "add_id"));
         add.clickAndWait(Until.newWindow(), WAIT_TIME);
-        mDevice.wait(Until.hasObject(By.res(SyncEnglish.PACKAGE, "iv_cover")), WAIT_TIME*5);
+        mDevice.wait(Until.hasObject(By.res(SyncEnglish.PACKAGE, "iv_cover")), WAIT_TIME * 5);
         Bitmap source_png = mHelper.takeScreenshot(mNumber);
         SystemClock.sleep(1000);
         clearRunprocess();
@@ -142,7 +145,7 @@ public class SyncEglishTestCase extends PerforTestCase {
                 m++;
                 startScreen = getCurrentDate();
                 Bitmap des_png = Bitmap.createBitmap(mAutomation.takeScreenshot(), mDevice.getDisplayWidth()
-                        / 2 -100, mDevice.getDisplayHeight() / 2 - 100, 100, 100);
+                        / 2 - 100, mDevice.getDisplayHeight() / 2 - 100, 100, 100);
                 endScreen = getCurrentDate();
                 compareResult = BitmapHelper.compare(Bitmap.createBitmap(source_png, mDevice.getDisplayWidth()
                         / 2 - 100, mDevice.getDisplayHeight() / 2 - 100, 100, 100), des_png);
@@ -168,8 +171,16 @@ public class SyncEglishTestCase extends PerforTestCase {
 
     //点击书本→书本内容界面显示完成
     @Test
-    public void showSyncEnglishBook() {
-
+    public void showSyncEnglishBook() throws JSONException {
+        JSONObject obj = new JSONObject();
+        mHelper.openSyncEnglish();
+        mDevice.wait(Until.hasObject(By.clazz(ListView.class)), WAIT_TIME);
+        UiObject2 booklist = mDevice.findObject(By.clazz(ListView.class));
+        List<UiObject2> children = booklist.getChildren();
+        UiObject2 child = children.get(children.size() / 2);
+        child.getChildren().get(0).clickAndWait(Until.newWindow(), WAIT_TIME);
+        SystemClock.sleep(5000);
+        instrumentationStatusOut(obj);
     }
 
     //书本内容界面点击头像→个人信息页面加载完成
@@ -177,24 +188,46 @@ public class SyncEglishTestCase extends PerforTestCase {
     public void syncEnglishSelfInfo() {
 
     }
+
     //书本内容界面点击趣味测验→测验页面内容加载完成
     @Test
     public void syncEnglishFunTest() {
 
     }
+
     //书本内容界面点击flash按钮→flas页面加载完成
     @Test
     public void syncEnglishFlash() {
 
     }
+
     //点读页面，点击句子选择单词--查，点击反查→词典列表弹出框加载完成
     @Test
     public void syncEnglishAccessDict() {
 
     }
+
     //趣味测验点击欧拉学英语→跳转到商店页面加载完成
     @Test
     public void syncEnglishOlaAccessBbkMarket() {
 
     }
+
+    private void openOneBook() {
+        //打开一本课本，非教材资料书
+        JSONObject obj = new JSONObject();
+        mHelper.openSyncEnglish();
+        mDevice.waitForIdle();
+//        if(mDevice.findObject(By.res(SyncEnglish.PACKAGE,"toptoolbar_id"),WAIT_TIME)){
+//
+//        }
+        mDevice.wait(Until.hasObject(By.clazz(ListView.class)), WAIT_TIME);
+        UiObject2 booklist = mDevice.findObject(By.clazz(ListView.class));
+        List<UiObject2> children = booklist.getChildren();
+        UiObject2 child = children.get(children.size() / 2);
+        child.getChildren().get(0).clickAndWait(Until.newWindow(), WAIT_TIME);
+        SystemClock.sleep(5000);
+        instrumentationStatusOut(obj);
+    }
+
 }
