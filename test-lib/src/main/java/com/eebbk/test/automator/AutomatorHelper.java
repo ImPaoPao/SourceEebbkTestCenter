@@ -278,10 +278,6 @@ public class AutomatorHelper {
     public void openSyncEnglish() {
         openIcon("同步英语", SyncEnglish.PACKAGE);
         mDevice.waitForIdle();
-    }
-    //打开同步英语首页 带刷新和添加
-    public void openSyncEnglishMain() {
-        openSyncEnglish();
         if (mDevice.wait(Until.hasObject(By.res(SyncEnglish.PACKAGE, "change_book_layout_id")), WAIT_TIME * 1)) {
             UiObject2 changBook = mDevice.findObject(By.res(SyncEnglish.PACKAGE, "change_book_layout_id"));
             if (changBook != null) {
@@ -289,6 +285,10 @@ public class AutomatorHelper {
                 mDevice.wait(Until.hasObject(By.res(SyncEnglish.PACKAGE, "add_id")), WAIT_TIME);
             }
         }
+    }
+    //打开同步英语首页 带刷新和添加首页
+    public void openSyncEnglishMain() {
+        openSyncEnglish();
         if (mDevice.wait(Until.hasObject(By.res(SyncEnglish.PACKAGE, "toptoolbar_id")), WAIT_TIME * 1)) {
             //带下拉环的菜单
             UiObject2 dropDown = mDevice.findObject(By.res(SyncEnglish.PACKAGE, "toptoolbar_id"));
@@ -301,30 +301,18 @@ public class AutomatorHelper {
                 longClick(60,rt.height()/2);
                 SystemClock.sleep(2000);
 
-                //mDevice.waitForWindowUpdate(SyncEnglish.PACKAGE,2000);
                 //更换课本
                 longClick(640,420);
-
                 //点击趣味测试
                 //longClick(rt.right-45,rt.height()/2);
+                mDevice.wait(Until.hasObject(By.res(SyncEnglish.PACKAGE, "add_id")), WAIT_TIME);
             }
         }
     }
 
-
-
-
-
-    //打开课本内容首页
+    //打开同步英语课本内容首页
     public void openSyncEnglishBook() {
         openSyncEnglish();
-        if (mDevice.wait(Until.hasObject(By.res(SyncEnglish.PACKAGE, "change_book_layout_id")), WAIT_TIME * 1)) {
-            UiObject2 changBook = mDevice.findObject(By.res(SyncEnglish.PACKAGE, "change_book_layout_id"));
-            if (changBook != null) {
-                changBook.click();
-                mDevice.wait(Until.hasObject(By.res(SyncEnglish.PACKAGE, "add_id")), WAIT_TIME);
-            }
-        }
         if (!mDevice.wait(Until.hasObject(By.res(SyncEnglish.PACKAGE, "toptoolbar_id")), WAIT_TIME * 1)) {
             mDevice.wait(Until.hasObject(By.clazz(ListView.class)), WAIT_TIME);
             UiObject2 booklist = mDevice.findObject(By.clazz(ListView.class));

@@ -1,6 +1,7 @@
 package com.eebbk.test.performance;
 
 import android.graphics.Bitmap;
+import android.graphics.Rect;
 import android.os.SystemClock;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.By;
@@ -11,6 +12,7 @@ import android.support.test.uiautomator.Until;
 import android.widget.ListView;
 
 import com.eebbk.test.common.BitmapHelper;
+import com.eebbk.test.common.PackageConstants.BbkMiddleMarket;
 import com.eebbk.test.common.PackageConstants.SyncEnglish;
 
 import org.json.JSONException;
@@ -18,6 +20,7 @@ import org.json.JSONObject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
@@ -75,7 +78,7 @@ public class SyncEglishTestCase extends PerforTestCase {
     @Test
     public void synEnglishRefresh() throws IOException, JSONException, InterruptedException {
         JSONObject obj = new JSONObject();
-        mHelper.openSyncEnglish();
+        mHelper.openSyncEnglishMain();
         UiObject2 refresh = mDevice.findObject(By.res(SyncEnglish.PACKAGE, "refresh"));
         Bitmap source_png = mHelper.takeScreenshot(mNumber);
         SystemClock.sleep(1000);
@@ -173,7 +176,7 @@ public class SyncEglishTestCase extends PerforTestCase {
     @Test
     public void showSyncEnglishBook() throws JSONException {
         JSONObject obj = new JSONObject();
-        mHelper.openSyncEnglish();
+        mHelper.openSyncEnglishMain();
         mDevice.wait(Until.hasObject(By.clazz(ListView.class)), WAIT_TIME);
         UiObject2 booklist = mDevice.findObject(By.clazz(ListView.class));
         List<UiObject2> children = booklist.getChildren();
@@ -185,38 +188,121 @@ public class SyncEglishTestCase extends PerforTestCase {
 
     //书本内容界面点击头像→个人信息页面加载完成
     @Test
-    public void syncEnglishSelfInfo() {
-//        mHelper.openSyncEnglish();//回到书列表界面
-        mHelper.openSyncEnglishMain();
-//        if (!mDevice.wait(Until.hasObject(By.res(SyncEnglish.PACKAGE, "toptoolbar_id")), WAIT_TIME * 1)) {
-//            mDevice.wait(Until.hasObject(By.clazz(ListView.class)), WAIT_TIME);
-//            UiObject2 booklist = mDevice.findObject(By.clazz(ListView.class));
-//            List<UiObject2> children = booklist.getChildren();
-//            UiObject2 child = children.get(children.size() / 2);
-//            child.getChildren().get(0).clickAndWait(Until.newWindow(), WAIT_TIME);
-//
-//        }else{
-//            //带下拉环的菜单
-//            UiObject2 dropDown = mDevice.findObject(By.res(SyncEnglish.PACKAGE, "toptoolbar_id"));
-//            if (dropDown!=null){
-//                Rect rt = dropDown.getVisibleBounds();
-//                //点击下拉环
-//                mHelper.longClick(rt.right-35,rt.height()/2);
-//                SystemClock.sleep(1000);
-//                //点击头像
-//                //longClick(60,rt.height()/2);
-//
-//                //点击趣味测试
-//                mHelper.longClick(rt.right-45,rt.height()/2);
-//            }
-//        }
+    public void syncEnglishSelfInfo() throws FileNotFoundException, JSONException {
+        mHelper.openSyncEnglishBook();
+        UiObject2 dropDown = mDevice.findObject(By.res(SyncEnglish.PACKAGE, "toptoolbar_id"));
+        Rect rt = dropDown.getVisibleBounds();
+        //点击下拉环
+        mHelper.longClick(rt.right - 35, rt.height() / 2);
+        SystemClock.sleep(2000);
+        //点击头像
+        mHelper.longClick(60, rt.height() / 2);
+        SystemClock.sleep(2000);
+        //截图保存
+        Bitmap source_png = mHelper.takeScreenshot(mNumber);
+        SystemClock.sleep(1000);
+        mDevice.pressBack();
+        mDevice.waitForIdle();
+        for (int i = 0; i < mCount; i++) {
+            JSONObject obj = new JSONObject();
+            String startScreen = "";
+            String endScreen = "";
+            String compareTime = "";
+            int compareResult = 1;
+            if (dropDown != null) {
+                //点击下拉环
+                mHelper.longClick(rt.right - 35, rt.height() / 2);
+                SystemClock.sleep(2000);
+                Date timeStamp1 = new Date();
+                int m = 0;
+                startTestRecord();
+                //点击头像
+                mHelper.longClick(60, rt.height() / 2);
+                do {
+                    m++;
+                    startScreen = getCurrentDate();
+                    Bitmap des_png = mAutomation.takeScreenshot();
+                    endScreen = getCurrentDate();
+                    compareResult = BitmapHelper.compare(Bitmap.createBitmap(source_png, 0, source_png.getHeight() / 2,
+                            source_png.getWidth(), source_png.getHeight() / 2), Bitmap.createBitmap(des_png, 0, des_png
+                            .getHeight() / 2, des_png.getWidth(), des_png.getHeight() / 2));
+
+                    compareTime = getCurrentDate();
+                    obj.put("m" + String.valueOf(m), compareResult);
+                    if (!des_png.isRecycled()) {
+                        des_png.recycle();
+                    }
+                    if ((new Date().getTime() - timeStamp1.getTime()) > WAIT_TIME * 4) {
+                        break;
+                    }
+                } while (compareResult >= 1);
+                String loadTime = getCurrentDate();
+                stopTestRecord(loadTime, startScreen, endScreen, compareTime, String.valueOf(compareResult));
+                SystemClock.sleep(1000);
+                mDevice.pressBack();
+                instrumentationStatusOut(obj);
+            }
+        }
 
     }
 
     //书本内容界面点击趣味测验→测验页面内容加载完成
     @Test
-    public void syncEnglishFunTest() {
-
+    public void syncEnglishFunTest() throws IOException, JSONException {
+        mHelper.openSyncEnglishBook();
+        UiObject2 dropDown = mDevice.findObject(By.res(SyncEnglish.PACKAGE, "toptoolbar_id"));
+        Rect rt = dropDown.getVisibleBounds();
+        //点击下拉环
+        mHelper.longClick(rt.right - 35, rt.height() / 2);
+        SystemClock.sleep(2000);
+        //点击趣味测试
+        mHelper.longClick(rt.right-45,rt.height()/2);
+        mDevice.waitForIdle();
+        SystemClock.sleep(2000);
+        //截图保存
+        Bitmap source_png = mHelper.takeScreenshot(mNumber);
+        SystemClock.sleep(1000);
+        mDevice.pressBack();
+        mDevice.waitForIdle();
+        for (int i = 0; i < mCount; i++) {
+            JSONObject obj = new JSONObject();
+            String startScreen = "";
+            String endScreen = "";
+            String compareTime = "";
+            int compareResult = 1;
+            if (dropDown != null) {
+                //点击下拉环
+                mHelper.longClick(rt.right - 35, rt.height() / 2);
+                SystemClock.sleep(2000);
+                Date timeStamp1 = new Date();
+                int m = 0;
+                startTestRecord();
+                //点击趣味测试
+                mHelper.longClick(rt.right-45,rt.height()/2);
+                do {
+                    m++;
+                    startScreen = getCurrentDate();
+                    Bitmap des_png = mAutomation.takeScreenshot();
+                    endScreen = getCurrentDate();
+                    compareResult = BitmapHelper.compare(source_png,des_png);
+                    compareTime = getCurrentDate();
+                    obj.put("m" + String.valueOf(m), compareResult);
+                    if (!des_png.isRecycled()) {
+                        des_png.recycle();
+                    }
+                    if ((new Date().getTime() - timeStamp1.getTime()) > WAIT_TIME * 4) {
+                        break;
+                    }
+                } while (compareResult >= 1);
+                String loadTime = getCurrentDate();
+                stopTestRecord(loadTime, startScreen, endScreen, compareTime, String.valueOf(compareResult));
+                mDevice.pressBack();
+                mDevice.waitForIdle();
+                instrumentationStatusOut(obj);
+            }
+        }
+        mDevice.pressHome();
+        clearRunprocess();
     }
 
     //书本内容界面点击flash按钮→flash页面加载完成
@@ -233,25 +319,65 @@ public class SyncEglishTestCase extends PerforTestCase {
 
     //趣味测验点击欧拉学英语→跳转到商店页面加载完成
     @Test
-    public void syncEnglishOlaAccessBbkMarket() {
-
-    }
-
-    private void openOneBook() {
-        //打开一本课本，非教材资料书
-        JSONObject obj = new JSONObject();
-        mHelper.openSyncEnglish();
+    public void syncEnglishOlaAccessBbkMarket() throws JSONException, IOException {
+        mHelper.openSyncEnglishBook();
+        UiObject2 dropDown = mDevice.findObject(By.res(SyncEnglish.PACKAGE, "toptoolbar_id"));
+        Rect rt = dropDown.getVisibleBounds();
+        //点击下拉环
+        mHelper.longClick(rt.right - 35, rt.height() / 2);
+        SystemClock.sleep(2000);
+        //点击趣味测试
+        mHelper.longClick(rt.right-45,rt.height()/2);
         mDevice.waitForIdle();
-//        if(mDevice.findObject(By.res(SyncEnglish.PACKAGE,"toptoolbar_id"),WAIT_TIME)){
-//
-//        }
-        mDevice.wait(Until.hasObject(By.clazz(ListView.class)), WAIT_TIME);
-        UiObject2 booklist = mDevice.findObject(By.clazz(ListView.class));
-        List<UiObject2> children = booklist.getChildren();
-        UiObject2 child = children.get(children.size() / 2);
-        child.getChildren().get(0).clickAndWait(Until.newWindow(), WAIT_TIME);
-        SystemClock.sleep(5000);
-        instrumentationStatusOut(obj);
+        SystemClock.sleep(2000);
+        //点击欧拉英语
+        mHelper.longClick(mDevice.getDisplayWidth()/4,mDevice.getDisplayHeight()/2);
+        mDevice.wait(Until.hasObject(By.res(BbkMiddleMarket.PACKAGE, "apk_button")), WAIT_TIME);
+        //截图保存
+        Bitmap source_png = mHelper.takeScreenshot(mNumber);
+        SystemClock.sleep(1000);
+        mDevice.pressBack();
+        mDevice.waitForIdle();
+        for (int i = 0; i < mCount; i++) {
+            JSONObject obj = new JSONObject();
+            String startScreen = "";
+            String endScreen = "";
+            String compareTime = "";
+            int compareResult = 1;
+            if (dropDown != null) {
+                //点击下拉环
+                mHelper.longClick(rt.right - 35, rt.height() / 2);
+                SystemClock.sleep(2000);
+                Date timeStamp1 = new Date();
+                int m = 0;
+                startTestRecord();
+                //点击欧拉英语
+                mHelper.longClick(mDevice.getDisplayWidth()/4,mDevice.getDisplayHeight()/2);
+                SystemClock.sleep(500);
+                do {
+                    m++;
+                    startScreen = getCurrentDate();
+                    Bitmap des_png = mAutomation.takeScreenshot();
+                    endScreen = getCurrentDate();
+                    compareResult = BitmapHelper.compare(source_png,des_png);
+                    compareTime = getCurrentDate();
+                    obj.put("m" + String.valueOf(m), compareResult);
+                    if (!des_png.isRecycled()) {
+                        des_png.recycle();
+                    }
+                    if ((new Date().getTime() - timeStamp1.getTime()) > WAIT_TIME * 4) {
+                        break;
+                    }
+                } while (compareResult >= 1);
+                String loadTime = getCurrentDate();
+                stopTestRecord(loadTime, startScreen, endScreen, compareTime, String.valueOf(compareResult));
+                mDevice.pressBack();
+                mDevice.waitForIdle();
+                instrumentationStatusOut(obj);
+            }
+        }
+        mDevice.pressHome();
+        clearRunprocess();
     }
 
 }

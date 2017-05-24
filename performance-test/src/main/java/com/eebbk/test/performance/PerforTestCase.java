@@ -41,7 +41,7 @@ public class PerforTestCase extends Automator {
     private XmlSerializer mXml;
     private String mStartTime;
 
-    protected int mCount = 1;
+    protected int mCount = 2;
     protected int mType = 0;//0:冷启动 1:热启动
     protected String mNumber = "unknown";
 
@@ -49,7 +49,7 @@ public class PerforTestCase extends Automator {
     public void setUp() throws Exception {
         super.setUp();
         clearRunprocess();
-        String count = getArguments().getString("count", "1");
+        String count = getArguments().getString("count", "2");
         String type = getArguments().getString("type", "0");
         mNumber = getArguments().getString("number", "unknown");
         if (TextUtils.isDigitsOnly(count)) {
