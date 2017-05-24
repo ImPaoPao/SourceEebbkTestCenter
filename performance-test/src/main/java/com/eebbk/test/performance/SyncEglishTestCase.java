@@ -186,6 +186,30 @@ public class SyncEglishTestCase extends PerforTestCase {
     //书本内容界面点击头像→个人信息页面加载完成
     @Test
     public void syncEnglishSelfInfo() {
+//        mHelper.openSyncEnglish();//回到书列表界面
+        mHelper.openSyncEnglishMain();
+//        if (!mDevice.wait(Until.hasObject(By.res(SyncEnglish.PACKAGE, "toptoolbar_id")), WAIT_TIME * 1)) {
+//            mDevice.wait(Until.hasObject(By.clazz(ListView.class)), WAIT_TIME);
+//            UiObject2 booklist = mDevice.findObject(By.clazz(ListView.class));
+//            List<UiObject2> children = booklist.getChildren();
+//            UiObject2 child = children.get(children.size() / 2);
+//            child.getChildren().get(0).clickAndWait(Until.newWindow(), WAIT_TIME);
+//
+//        }else{
+//            //带下拉环的菜单
+//            UiObject2 dropDown = mDevice.findObject(By.res(SyncEnglish.PACKAGE, "toptoolbar_id"));
+//            if (dropDown!=null){
+//                Rect rt = dropDown.getVisibleBounds();
+//                //点击下拉环
+//                mHelper.longClick(rt.right-35,rt.height()/2);
+//                SystemClock.sleep(1000);
+//                //点击头像
+//                //longClick(60,rt.height()/2);
+//
+//                //点击趣味测试
+//                mHelper.longClick(rt.right-45,rt.height()/2);
+//            }
+//        }
 
     }
 
@@ -195,7 +219,7 @@ public class SyncEglishTestCase extends PerforTestCase {
 
     }
 
-    //书本内容界面点击flash按钮→flas页面加载完成
+    //书本内容界面点击flash按钮→flash页面加载完成
     @Test
     public void syncEnglishFlash() {
 

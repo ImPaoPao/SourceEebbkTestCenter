@@ -103,7 +103,6 @@ public class SyncMathTestCase extends PerforTestCase {
 
     }
 
-
     //书本内容界面，点击左上角目录按钮，点击知识讲解→知识讲解内容加载完成
     @Test
     public void showExplanationSynMathBook() {

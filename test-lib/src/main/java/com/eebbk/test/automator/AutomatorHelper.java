@@ -16,6 +16,7 @@ import android.support.test.uiautomator.UiScrollable;
 import android.support.test.uiautomator.UiSelector;
 import android.support.test.uiautomator.Until;
 import android.text.TextUtils;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.eebbk.test.common.PackageConstants.BbkMiddleMarket;
@@ -273,15 +274,63 @@ public class AutomatorHelper {
         openIcon(title, null);
     }
 
+    //打开同步英语初始化首页
     public void openSyncEnglish() {
         openIcon("同步英语", SyncEnglish.PACKAGE);
         mDevice.waitForIdle();
-        if (mDevice.wait(Until.hasObject(By.res(SyncEnglish.PACKAGE, "change_book_layout_id")), WAIT_TIME * 2)) {
+    }
+    //打开同步英语首页 带刷新和添加
+    public void openSyncEnglishMain() {
+        openSyncEnglish();
+        if (mDevice.wait(Until.hasObject(By.res(SyncEnglish.PACKAGE, "change_book_layout_id")), WAIT_TIME * 1)) {
             UiObject2 changBook = mDevice.findObject(By.res(SyncEnglish.PACKAGE, "change_book_layout_id"));
             if (changBook != null) {
                 changBook.click();
                 mDevice.wait(Until.hasObject(By.res(SyncEnglish.PACKAGE, "add_id")), WAIT_TIME);
             }
+        }
+        if (mDevice.wait(Until.hasObject(By.res(SyncEnglish.PACKAGE, "toptoolbar_id")), WAIT_TIME * 1)) {
+            //带下拉环的菜单
+            UiObject2 dropDown = mDevice.findObject(By.res(SyncEnglish.PACKAGE, "toptoolbar_id"));
+            if (dropDown!=null){
+                Rect rt = dropDown.getVisibleBounds();
+                //点击下拉环
+                longClick(rt.right-35,rt.height()/2);
+                SystemClock.sleep(1000);
+                //点击头像
+                longClick(60,rt.height()/2);
+                SystemClock.sleep(2000);
+
+                //mDevice.waitForWindowUpdate(SyncEnglish.PACKAGE,2000);
+                //更换课本
+                longClick(640,420);
+
+                //点击趣味测试
+                //longClick(rt.right-45,rt.height()/2);
+            }
+        }
+    }
+
+
+
+
+
+    //打开课本内容首页
+    public void openSyncEnglishBook() {
+        openSyncEnglish();
+        if (mDevice.wait(Until.hasObject(By.res(SyncEnglish.PACKAGE, "change_book_layout_id")), WAIT_TIME * 1)) {
+            UiObject2 changBook = mDevice.findObject(By.res(SyncEnglish.PACKAGE, "change_book_layout_id"));
+            if (changBook != null) {
+                changBook.click();
+                mDevice.wait(Until.hasObject(By.res(SyncEnglish.PACKAGE, "add_id")), WAIT_TIME);
+            }
+        }
+        if (!mDevice.wait(Until.hasObject(By.res(SyncEnglish.PACKAGE, "toptoolbar_id")), WAIT_TIME * 1)) {
+            mDevice.wait(Until.hasObject(By.clazz(ListView.class)), WAIT_TIME);
+            UiObject2 booklist = mDevice.findObject(By.clazz(ListView.class));
+            List<UiObject2> children = booklist.getChildren();
+            UiObject2 child = children.get(children.size() / 2);
+            child.getChildren().get(0).clickAndWait(Until.newWindow(), WAIT_TIME);
         }
     }
 
