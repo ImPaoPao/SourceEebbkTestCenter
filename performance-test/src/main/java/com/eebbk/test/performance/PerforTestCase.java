@@ -3,6 +3,7 @@ package com.eebbk.test.performance;
 import android.app.Instrumentation;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
@@ -15,7 +16,9 @@ import android.util.Log;
 import android.util.Xml;
 
 import com.eebbk.test.automator.Automator;
+import com.eebbk.test.common.BitmapHelper;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.After;
 import org.junit.Before;
@@ -27,7 +30,9 @@ import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import static android.os.SystemClock.sleep;
@@ -119,7 +124,8 @@ public class PerforTestCase extends Automator {
         mStartTime = null;
     }
 
-    public void stopTestRecord(String loadtime,String startScreen, String endScreen, String compareTime,String compareResult) {
+    public void stopTestRecord(String loadtime, String startScreen, String endScreen, String compareTime, String
+            compareResult) {
         Log.i(TAG, "record endtime and infos");
         if (mStartTime != null) {
             try {
@@ -140,7 +146,7 @@ public class PerforTestCase extends Automator {
         mStartTime = null;
     }
 
-    public void stopTestRecord(String loadtime, String refreshTime,String loadResult, String refreshResult) {
+    public void stopTestRecord(String loadtime, String refreshTime, String loadResult, String refreshResult) {
         Log.i(TAG, "record endtime and infos");
         if (mStartTime != null) {
             try {
@@ -148,9 +154,9 @@ public class PerforTestCase extends Automator {
                 mXml.startTag(null, "Segment");
                 mXml.attribute(null, "starttime", mStartTime);
                 mXml.attribute(null, "loadtime", loadtime);
-                mXml.attribute(null, "refreshTime", refreshTime);
-                mXml.attribute(null, "loadResult", loadResult);
-                mXml.attribute(null, "refreshResult", refreshResult);
+                mXml.attribute(null, "refreshtime", refreshTime);
+                mXml.attribute(null, "loadresult", loadResult);
+                mXml.attribute(null, "refreshresult", refreshResult);
                 mXml.attribute(null, "endtime", getCurrentDate());
                 mXml.endTag(null, "Segment");
             } catch (IOException e) {
@@ -225,18 +231,61 @@ public class PerforTestCase extends Automator {
     }
 
 
-    protected Bitmap getModuleSourceScreen(BySelector bySelector,String startPackage,String clickWidget,String
-            existWidget,long waitTime) {
-        Bitmap source_png = null;
-        swipeCurrentLauncher();
-
-        return source_png;
-    }
-
-
     protected Bitmap getHomeSourceScreen(BySelector bySelector, String startPackage, long waitTime) throws
             IOException, InterruptedException {
         return getHomeSourceScreen(bySelector, startPackage, null, waitTime);
+    }
+
+    public List doCompare(Bitmap sourcePng, Rect loadPngRect,Date timeStamp) throws JSONException {
+        return doCompare(sourcePng,loadPngRect,null,timeStamp);
+
+    }
+
+    public List doCompare(Bitmap sourcePng, Rect loadPngRect, Rect refreshPngRect, Date timeStamp) throws
+            JSONException {
+        JSONObject obj = new JSONObject();
+        int m = 0;
+        List timeList = new ArrayList();
+        int loadResult = 1;
+        int refreshResult = 1;
+        boolean loadFlag = true;
+        do {
+            m++;
+            Bitmap des_png = mAutomation.takeScreenshot();
+            Bitmap loadPng = Bitmap.createBitmap(des_png, loadPngRect.left, loadPngRect.top, loadPngRect.width(),
+                    loadPngRect.height());
+            if (loadFlag) {
+                obj.put(String.valueOf(m) + ":", loadFlag);
+                loadResult = BitmapHelper.compare(Bitmap.createBitmap(sourcePng, loadPngRect.left, loadPngRect.top,
+                        loadPngRect.width(), loadPngRect.height()), loadPng);
+                if (loadPng != null && !loadPng.isRecycled()) {
+                    loadPng.recycle();
+                }
+                obj.put(String.valueOf(m) + "loadResult===:", loadResult);
+            }
+            if (loadResult <= 1 && loadFlag) {
+                obj.put(String.valueOf(m) + "loadResult***:", loadResult);
+                timeList.add(getCurrentDate());
+                loadFlag = false;
+            }
+            if (refreshPngRect != null) {
+                Bitmap refreshPng = Bitmap.createBitmap(des_png, refreshPngRect.left, refreshPngRect.top,
+                        refreshPngRect.width(),refreshPngRect.height());
+                refreshResult = BitmapHelper.compare(Bitmap.createBitmap(sourcePng, refreshPngRect.left, refreshPngRect.top,
+                        refreshPngRect.width(),refreshPngRect.height()), refreshPng);
+                if (refreshPng != null && !refreshPng.isRecycled()) {
+                    refreshPng.recycle();
+                }
+            }else{
+                refreshResult=loadResult;
+            }
+            obj.put(String.valueOf(m) + "refreshResult:", refreshResult);
+            if ((new Date().getTime() - timeStamp.getTime()) > WAIT_TIME * 5) {
+                break;
+            }
+        } while (loadResult >= 1 || refreshResult >= 1);
+        timeList.add(getCurrentDate());
+        return timeList;
     }
 
 }
