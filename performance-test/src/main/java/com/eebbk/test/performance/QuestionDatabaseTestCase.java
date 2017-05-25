@@ -1,6 +1,7 @@
 package com.eebbk.test.performance;
 
 import android.graphics.Bitmap;
+import android.graphics.Rect;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.By;
 import android.support.test.uiautomator.BySelector;
@@ -8,7 +9,6 @@ import android.support.test.uiautomator.UiObject2;
 import android.support.test.uiautomator.UiObjectNotFoundException;
 import android.support.test.uiautomator.Until;
 
-import com.eebbk.test.common.BitmapHelper;
 import com.eebbk.test.common.PackageConstants.QuestionDatabase;
 
 import org.json.JSONException;
@@ -18,6 +18,7 @@ import org.junit.runner.RunWith;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.Map;
 
 import static android.os.SystemClock.sleep;
 
@@ -30,39 +31,19 @@ public class QuestionDatabaseTestCase extends PerforTestCase {
         BySelector byQuestionDb = By.text("好题精练");
         Bitmap source_png = getHomeSourceScreen(byQuestionDb, QuestionDatabase.PACKAGE,
                 "exercise_main_default_banner", 5000);
+        Rect refreshPngRect = new Rect(0,0,source_png.getWidth(),source_png.getHeight()-60);
+        Rect loadPngRect = new Rect(0,source_png.getHeight()-60,source_png.getWidth(),source_png.getHeight());
         for (int i = 0; i < mCount; i++) {
-            String startScreen = "";
-            String endScreen = "";
-            String compareTime = "";
-            int compareResult = 5;
-            Date timeStamp1 = new Date();
-
             swipeCurrentLauncher();
             mDevice.wait(Until.hasObject(byQuestionDb), WAIT_TIME);
             UiObject2 questionDb = mDevice.findObject(byQuestionDb);
             startTestRecord();
             questionDb.clickAndWait(Until.newWindow(), WAIT_TIME);
-            int m = 0;
-            do {
-                startScreen = getCurrentDate();
-                Bitmap des_png = mAutomation.takeScreenshot();
-                endScreen = getCurrentDate();
-                compareResult = BitmapHelper.compare(source_png, des_png);
-                compareTime = getCurrentDate();
-                if(!des_png.isRecycled()){
-                    des_png.recycle();
-                }
-                obj.put("compareResult:" + String.valueOf(m), compareResult);
-                if ((new Date().getTime() - timeStamp1.getTime()) > WAIT_TIME * 5) {
-                    obj.put("break========:" + String.valueOf(m), compareResult);
-                    break;
-                }
-            } while (compareResult >= 1);
-            String loadTime = getCurrentDate();
-            instrumentationStatusOut(obj);
+            Map<String, String> compareResult = doCompare(source_png, loadPngRect, refreshPngRect, new Date());
             mDevice.wait(Until.hasObject(By.res(QuestionDatabase.PACKAGE, "exercise_main_default_banner")), WAIT_TIME);
+            stopTestRecord(compareResult.get("loadTime"), compareResult.get("refreshTime"), compareResult.get
+                    ("loadResult"), compareResult.get("refreshResult"));
             sleep(3000);
-            stopTestRecord(loadTime, startScreen, endScreen, compareTime, String.valueOf(compareResult));
             mDevice.pressHome();
             clearRunprocess();
         }

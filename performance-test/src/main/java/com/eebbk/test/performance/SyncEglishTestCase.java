@@ -11,12 +11,10 @@ import android.support.test.uiautomator.UiObjectNotFoundException;
 import android.support.test.uiautomator.Until;
 import android.widget.ListView;
 
-import com.eebbk.test.common.BitmapHelper;
 import com.eebbk.test.common.PackageConstants.BbkMiddleMarket;
 import com.eebbk.test.common.PackageConstants.SyncEnglish;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -24,6 +22,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 
 @RunWith(AndroidJUnit4.class)
@@ -32,40 +31,19 @@ public class SyncEglishTestCase extends PerforTestCase {
 
     @Test
     public void launchSyncEnglish() throws IOException, UiObjectNotFoundException, InterruptedException, JSONException {
-        JSONObject obj = new JSONObject();
         Bitmap source_png = getHomeSourceScreen(bySelector, SyncEnglish.PACKAGE, "imageview_mainbookshelf_blackboard",
                 5000);
+        Rect loadPngRect = new Rect(0, 0, source_png.getWidth(), source_png.getHeight());
         for (int i = 0; i < mCount; i++) {
-            String startScreen = "";
-            String endScreen = "";
-            String compareTime = "";
-            int compareResult = 10;
             swipeCurrentLauncher();
             mDevice.wait(Until.hasObject(bySelector), WAIT_TIME);
-            UiObject2 synMath = mDevice.findObject(bySelector);
-            Date timeStamp1 = new Date();
+            UiObject2 synEng = mDevice.findObject(bySelector);
             startTestRecord();
-            synMath.clickAndWait(Until.newWindow(), WAIT_TIME);
-            int m = 0;
-            do {
-                m++;
-                startScreen = getCurrentDate();
-                Bitmap des_png = mAutomation.takeScreenshot();
-                endScreen = getCurrentDate();
-                compareResult = BitmapHelper.compare(source_png, des_png);
-                obj.put("compareResult" + String.valueOf(m), compareResult);
-                compareTime = getCurrentDate();
-                if (!des_png.isRecycled()) {
-                    des_png.recycle();
-                }
-                if ((new Date().getTime() - timeStamp1.getTime()) > WAIT_TIME * 5) {
-                    break;
-                }
-            } while (compareResult >= 5);
-            instrumentationStatusOut(obj);
-            String loadTime = getCurrentDate();
+            synEng.clickAndWait(Until.newWindow(), WAIT_TIME);
+            Map<String, String> compareResult = doCompare(source_png, loadPngRect, new Date());
             mDevice.wait(Until.hasObject(By.res(SyncEnglish.PACKAGE, "imageview_mainbookshelf_blackboard")), WAIT_TIME);
-            stopTestRecord(loadTime, startScreen, endScreen, compareTime, String.valueOf(compareResult));
+            stopTestRecord(compareResult.get("loadTime"), compareResult.get("refreshTime"), compareResult.get
+                    ("loadResult"), compareResult.get("refreshResult"));
             mDevice.pressHome();
             clearRunprocess();
         }
@@ -77,43 +55,22 @@ public class SyncEglishTestCase extends PerforTestCase {
     //前置条件：首页下载好十本书
     @Test
     public void synEnglishRefresh() throws IOException, JSONException, InterruptedException {
-        JSONObject obj = new JSONObject();
         mHelper.openSyncEnglishMain();
         UiObject2 refresh = mDevice.findObject(By.res(SyncEnglish.PACKAGE, "refresh"));
         Bitmap source_png = mHelper.takeScreenshot(mNumber);
+        //中间刷新的那个黑色的带彩色点的小方块
+        Rect loadPngRect = new Rect(source_png.getWidth() / 2 - 30, source_png.getHeight() / 2 - 30,
+                source_png.getWidth() / 2 + 30, source_png.getHeight() / 2 + 30);
         SystemClock.sleep(1000);
-        for (int i = 0; i < 3; i++) {
-            String startScreen = "";
-            String endScreen = "";
-            String compareTime = "";
-            int compareResult = 10;
-            Date timeStamp1 = new Date();
+        for (int i = 0; i < mCount; i++) {
             startTestRecord();
             refresh.clickAndWait(Until.newWindow(), WAIT_TIME);
             SystemClock.sleep(200);
-            int m = 0;
-            do {
-                m++;
-                startScreen = getCurrentDate();
-                Bitmap des_png = Bitmap.createBitmap(mAutomation.takeScreenshot(), mDevice.getDisplayWidth()
-                        / 2 - 30, mDevice.getDisplayHeight() / 2 - 30, 60, 60);
-                endScreen = getCurrentDate();
-                compareResult = BitmapHelper.compare(Bitmap.createBitmap(source_png, mDevice.getDisplayWidth()
-                        / 2 - 30, mDevice.getDisplayHeight() / 2 - 30, 60, 60), des_png);
-                compareTime = getCurrentDate();
-                obj.put("compare:" + String.valueOf(m) + String.valueOf(i), compareResult);
-                if (!des_png.isRecycled()) {
-                    des_png.recycle();
-                }
-                if ((new Date().getTime() - timeStamp1.getTime()) > WAIT_TIME * 2) {
-                    break;
-                }
-            } while (compareResult >= 1);
-            String loadTime = getCurrentDate();
-            stopTestRecord(loadTime, startScreen, endScreen, compareTime, String.valueOf(compareResult));
+            Map<String, String> compareResult = doCompare(source_png, loadPngRect, new Date());
+            stopTestRecord(compareResult.get("loadTime"), compareResult.get("refreshTime"), compareResult.get
+                    ("loadResult"), compareResult.get("refreshResult"));
             mDevice.waitForIdle();
-            SystemClock.sleep(1000);
-            instrumentationStatusOut(obj);
+            SystemClock.sleep(2000);
         }
         if (!source_png.isRecycled()) {
             source_png.recycle();
@@ -123,49 +80,29 @@ public class SyncEglishTestCase extends PerforTestCase {
     //点击添加按钮→下载界面加载完成
     @Test
     public void addSyncEnglishBook() throws IOException, JSONException {
-        JSONObject obj = new JSONObject();
         //获取屏幕截图
-        mHelper.openSyncEnglish();
+        mHelper.openSyncEnglishMain();
         UiObject2 add = mDevice.findObject(By.res(SyncEnglish.PACKAGE, "add_id"));
         add.clickAndWait(Until.newWindow(), WAIT_TIME);
-        mDevice.wait(Until.hasObject(By.res(SyncEnglish.PACKAGE, "iv_cover")), WAIT_TIME * 5);
+        mDevice.wait(Until.hasObject(By.res(SyncEnglish.PACKAGE, "iv_cover")), WAIT_TIME * 4);
         Bitmap source_png = mHelper.takeScreenshot(mNumber);
+        Rect loadPngRect = new Rect(0, 0, source_png.getWidth(), 80);
+        //中间 "正在加载"刷新框
+        Rect refreshPngRect = new Rect(source_png.getWidth() / 2 - 100, source_png.getHeight() / 2, source_png
+                .getWidth() / 2 + 100, source_png.getHeight() / 2 + 60);
         SystemClock.sleep(1000);
         clearRunprocess();
         for (int i = 0; i < mCount; i++) {
-            String startScreen = "";
-            String endScreen = "";
-            String compareTime = "";
-            int compareResult = 1;
-            mHelper.openSyncEnglish();
+            mHelper.openSyncEnglishMain();
             mDevice.wait(Until.hasObject(By.res(SyncEnglish.PACKAGE, "add_id")), WAIT_TIME);
             UiObject2 add2 = mDevice.findObject(By.res(SyncEnglish.PACKAGE, "add_id"));
-            Date timeStamp1 = new Date();
             startTestRecord();
             add2.clickAndWait(Until.newWindow(), WAIT_TIME);
-            int m = 0;
-            do {
-                m++;
-                startScreen = getCurrentDate();
-                Bitmap des_png = Bitmap.createBitmap(mAutomation.takeScreenshot(), mDevice.getDisplayWidth()
-                        / 2 - 100, mDevice.getDisplayHeight() / 2 - 100, 100, 100);
-                endScreen = getCurrentDate();
-                compareResult = BitmapHelper.compare(Bitmap.createBitmap(source_png, mDevice.getDisplayWidth()
-                        / 2 - 100, mDevice.getDisplayHeight() / 2 - 100, 100, 100), des_png);
-                compareTime = getCurrentDate();
-                obj.put("compare:" + String.valueOf(m), compareResult);
-                if (!des_png.isRecycled()) {
-                    des_png.recycle();
-                }
-                if ((new Date().getTime() - timeStamp1.getTime()) > WAIT_TIME * 5) {
-                    break;
-                }
-            } while (compareResult >= 1);
-            String loadTime = getCurrentDate();
-            stopTestRecord(loadTime, startScreen, endScreen, compareTime, String.valueOf(compareResult));
+            Map<String, String> compareResult = doCompare(source_png, loadPngRect, refreshPngRect, new Date());
+            stopTestRecord(compareResult.get("loadTime"), compareResult.get("refreshTime"), compareResult.get
+                    ("loadResult"), compareResult.get("refreshResult"));
             mDevice.waitForIdle();
             mDevice.pressBack();
-            instrumentationStatusOut(obj);
         }
         if (!source_png.isRecycled()) {
             source_png.recycle();
@@ -174,17 +111,38 @@ public class SyncEglishTestCase extends PerforTestCase {
 
     //点击书本→书本内容界面显示完成
     @Test
-    public void showSyncEnglishBook() throws JSONException {
-        JSONObject obj = new JSONObject();
+    public void showSyncEnglishBook() throws JSONException, IOException {
+        //获取屏幕截图
         mHelper.openSyncEnglishMain();
         mDevice.wait(Until.hasObject(By.clazz(ListView.class)), WAIT_TIME);
         UiObject2 booklist = mDevice.findObject(By.clazz(ListView.class));
         List<UiObject2> children = booklist.getChildren();
         UiObject2 child = children.get(children.size() / 2);
-        child.getChildren().get(0).clickAndWait(Until.newWindow(), WAIT_TIME);
-        SystemClock.sleep(5000);
-        instrumentationStatusOut(obj);
+        child.getChildren().get(1).clickAndWait(Until.newWindow(), WAIT_TIME);
+        mDevice.waitForIdle();
+        Bitmap source_png = mHelper.takeScreenshot(mNumber);
+        SystemClock.sleep(1000);
+        Rect loadPngRect = new Rect(0, 0, source_png.getWidth(), source_png.getHeight());
+        clearRunprocess();
+        for (int i = 0; i < mCount; i++) {
+            mHelper.openSyncEnglishMain();
+            mDevice.wait(Until.hasObject(By.clazz(ListView.class)), WAIT_TIME);
+            booklist = mDevice.findObject(By.clazz(ListView.class));
+            children = booklist.getChildren();
+            child = children.get(children.size() / 2);
+            UiObject2 click = child.getChildren().get(1);
+            startTestRecord();
+            click.clickAndWait(Until.newWindow(), WAIT_TIME);
+            Map<String, String> compareResult = doCompare(source_png, loadPngRect, loadPngRect, new Date());
+            stopTestRecord(compareResult.get("loadTime"), compareResult.get("refreshTime"), compareResult.get
+                    ("loadResult"), compareResult.get("refreshResult"));
+            mDevice.waitForIdle();
+        }
+        if (!source_png.isRecycled()) {
+            source_png.recycle();
+        }
     }
+
 
     //书本内容界面点击头像→个人信息页面加载完成
     @Test
@@ -201,49 +159,22 @@ public class SyncEglishTestCase extends PerforTestCase {
         //截图保存
         Bitmap source_png = mHelper.takeScreenshot(mNumber);
         SystemClock.sleep(1000);
+        Rect loadPngRect = new Rect(0, source_png.getHeight() / 2, source_png.getWidth(), source_png.getHeight());
         mDevice.pressBack();
         mDevice.waitForIdle();
         for (int i = 0; i < mCount; i++) {
-            JSONObject obj = new JSONObject();
-            String startScreen = "";
-            String endScreen = "";
-            String compareTime = "";
-            int compareResult = 1;
-            if (dropDown != null) {
-                //点击下拉环
-                mHelper.longClick(rt.right - 35, rt.height() / 2);
-                SystemClock.sleep(2000);
-                Date timeStamp1 = new Date();
-                int m = 0;
-                startTestRecord();
-                //点击头像
-                mHelper.longClick(60, rt.height() / 2);
-                do {
-                    m++;
-                    startScreen = getCurrentDate();
-                    Bitmap des_png = mAutomation.takeScreenshot();
-                    endScreen = getCurrentDate();
-                    compareResult = BitmapHelper.compare(Bitmap.createBitmap(source_png, 0, source_png.getHeight() / 2,
-                            source_png.getWidth(), source_png.getHeight() / 2), Bitmap.createBitmap(des_png, 0, des_png
-                            .getHeight() / 2, des_png.getWidth(), des_png.getHeight() / 2));
-
-                    compareTime = getCurrentDate();
-                    obj.put("m" + String.valueOf(m), compareResult);
-                    if (!des_png.isRecycled()) {
-                        des_png.recycle();
-                    }
-                    if ((new Date().getTime() - timeStamp1.getTime()) > WAIT_TIME * 4) {
-                        break;
-                    }
-                } while (compareResult >= 1);
-                String loadTime = getCurrentDate();
-                stopTestRecord(loadTime, startScreen, endScreen, compareTime, String.valueOf(compareResult));
-                SystemClock.sleep(1000);
-                mDevice.pressBack();
-                instrumentationStatusOut(obj);
-            }
+            //点击下拉环
+            mHelper.longClick(rt.right - 35, rt.height() / 2);
+            SystemClock.sleep(2000);
+            startTestRecord();
+            //点击头像
+            mHelper.longClick(60, rt.height() / 2);
+            Map<String, String> compareResult = doCompare(source_png, loadPngRect, loadPngRect, new Date());
+            stopTestRecord(compareResult.get("loadTime"), compareResult.get("refreshTime"), compareResult.get
+                    ("loadResult"), compareResult.get("refreshResult"));
+            mDevice.pressBack();
+            mDevice.waitForIdle();
         }
-
     }
 
     //书本内容界面点击趣味测验→测验页面内容加载完成
@@ -256,53 +187,28 @@ public class SyncEglishTestCase extends PerforTestCase {
         mHelper.longClick(rt.right - 35, rt.height() / 2);
         SystemClock.sleep(2000);
         //点击趣味测试
-        mHelper.longClick(rt.right-45,rt.height()/2);
+        mHelper.longClick(rt.right - 45, rt.height() / 2);
         mDevice.waitForIdle();
         SystemClock.sleep(2000);
         //截图保存
         Bitmap source_png = mHelper.takeScreenshot(mNumber);
         SystemClock.sleep(1000);
+        Rect loadPngRect = new Rect(0, 0, source_png.getWidth(), source_png.getHeight());
         mDevice.pressBack();
         mDevice.waitForIdle();
         for (int i = 0; i < mCount; i++) {
-            JSONObject obj = new JSONObject();
-            String startScreen = "";
-            String endScreen = "";
-            String compareTime = "";
-            int compareResult = 1;
-            if (dropDown != null) {
-                //点击下拉环
-                mHelper.longClick(rt.right - 35, rt.height() / 2);
-                SystemClock.sleep(2000);
-                Date timeStamp1 = new Date();
-                int m = 0;
-                startTestRecord();
-                //点击趣味测试
-                mHelper.longClick(rt.right-45,rt.height()/2);
-                do {
-                    m++;
-                    startScreen = getCurrentDate();
-                    Bitmap des_png = mAutomation.takeScreenshot();
-                    endScreen = getCurrentDate();
-                    compareResult = BitmapHelper.compare(source_png,des_png);
-                    compareTime = getCurrentDate();
-                    obj.put("m" + String.valueOf(m), compareResult);
-                    if (!des_png.isRecycled()) {
-                        des_png.recycle();
-                    }
-                    if ((new Date().getTime() - timeStamp1.getTime()) > WAIT_TIME * 4) {
-                        break;
-                    }
-                } while (compareResult >= 1);
-                String loadTime = getCurrentDate();
-                stopTestRecord(loadTime, startScreen, endScreen, compareTime, String.valueOf(compareResult));
-                mDevice.pressBack();
-                mDevice.waitForIdle();
-                instrumentationStatusOut(obj);
-            }
+            //点击下拉环
+            mHelper.longClick(rt.right - 35, rt.height() / 2);
+            SystemClock.sleep(2000);
+            startTestRecord();
+            //点击趣味测试
+            mHelper.longClick(rt.right - 45, rt.height() / 2);
+            Map<String, String> compareResult = doCompare(source_png, loadPngRect, loadPngRect, new Date());
+            stopTestRecord(compareResult.get("loadTime"), compareResult.get("refreshTime"), compareResult.get
+                    ("loadResult"), compareResult.get("refreshResult"));
+            mDevice.pressBack();
+            mDevice.waitForIdle();
         }
-        mDevice.pressHome();
-        clearRunprocess();
     }
 
     //书本内容界面点击flash按钮→flash页面加载完成
@@ -327,57 +233,36 @@ public class SyncEglishTestCase extends PerforTestCase {
         mHelper.longClick(rt.right - 35, rt.height() / 2);
         SystemClock.sleep(2000);
         //点击趣味测试
-        mHelper.longClick(rt.right-45,rt.height()/2);
+        mHelper.longClick(rt.right - 45, rt.height() / 2);
         mDevice.waitForIdle();
         SystemClock.sleep(2000);
         //点击欧拉英语
-        mHelper.longClick(mDevice.getDisplayWidth()/4,mDevice.getDisplayHeight()/2);
+        startTestRecord();
+        mHelper.longClick(mDevice.getDisplayWidth() / 4, mDevice.getDisplayHeight() / 2);
         mDevice.wait(Until.hasObject(By.res(BbkMiddleMarket.PACKAGE, "apk_button")), WAIT_TIME);
+        mDevice.waitForIdle();
         //截图保存
         Bitmap source_png = mHelper.takeScreenshot(mNumber);
         SystemClock.sleep(1000);
+        Rect refreshPngRect = new Rect(0, 0, source_png.getWidth(), source_png.getHeight() - 80);
+        Rect loadPngRect = new Rect(0, source_png.getHeight() - 80, source_png.getWidth(), source_png.getHeight());
         mDevice.pressBack();
         mDevice.waitForIdle();
         for (int i = 0; i < mCount; i++) {
-            JSONObject obj = new JSONObject();
-            String startScreen = "";
-            String endScreen = "";
-            String compareTime = "";
-            int compareResult = 1;
-            if (dropDown != null) {
-                //点击下拉环
-                mHelper.longClick(rt.right - 35, rt.height() / 2);
-                SystemClock.sleep(2000);
-                Date timeStamp1 = new Date();
-                int m = 0;
-                startTestRecord();
-                //点击欧拉英语
-                mHelper.longClick(mDevice.getDisplayWidth()/4,mDevice.getDisplayHeight()/2);
-                SystemClock.sleep(500);
-                do {
-                    m++;
-                    startScreen = getCurrentDate();
-                    Bitmap des_png = mAutomation.takeScreenshot();
-                    endScreen = getCurrentDate();
-                    compareResult = BitmapHelper.compare(source_png,des_png);
-                    compareTime = getCurrentDate();
-                    obj.put("m" + String.valueOf(m), compareResult);
-                    if (!des_png.isRecycled()) {
-                        des_png.recycle();
-                    }
-                    if ((new Date().getTime() - timeStamp1.getTime()) > WAIT_TIME * 4) {
-                        break;
-                    }
-                } while (compareResult >= 1);
-                String loadTime = getCurrentDate();
-                stopTestRecord(loadTime, startScreen, endScreen, compareTime, String.valueOf(compareResult));
-                mDevice.pressBack();
-                mDevice.waitForIdle();
-                instrumentationStatusOut(obj);
-            }
+            //点击下拉环
+            mHelper.longClick(rt.right - 35, rt.height() / 2);
+            SystemClock.sleep(2000);
+            Date timeStamp1 = new Date();
+            int m = 0;
+            startTestRecord();
+            //点击欧拉英语
+            mHelper.longClick(mDevice.getDisplayWidth() / 4, mDevice.getDisplayHeight() / 2);
+            Map<String, String> compareResult = doCompare(source_png, loadPngRect, refreshPngRect, new Date());
+            stopTestRecord(compareResult.get("loadTime"), compareResult.get("refreshTime"), compareResult.get
+                    ("loadResult"), compareResult.get("refreshResult"));
+            mDevice.pressBack();
+            mDevice.waitForIdle();
         }
-        mDevice.pressHome();
-        clearRunprocess();
     }
 
 }

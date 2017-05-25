@@ -289,7 +289,7 @@ public class AutomatorHelper {
     //打开同步英语首页 带刷新和添加首页
     public void openSyncEnglishMain() {
         openSyncEnglish();
-        if (mDevice.wait(Until.hasObject(By.res(SyncEnglish.PACKAGE, "toptoolbar_id")), WAIT_TIME * 1)) {
+        if (mDevice.wait(Until.hasObject(By.res(SyncEnglish.PACKAGE, "toptoolbar_id")), WAIT_TIME)) {
             //带下拉环的菜单
             UiObject2 dropDown = mDevice.findObject(By.res(SyncEnglish.PACKAGE, "toptoolbar_id"));
             if (dropDown!=null){
@@ -300,7 +300,6 @@ public class AutomatorHelper {
                 //点击头像
                 longClick(60,rt.height()/2);
                 SystemClock.sleep(2000);
-
                 //更换课本
                 longClick(640,420);
                 //点击趣味测试

@@ -2,6 +2,7 @@ package com.eebbk.test.performance;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Rect;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.By;
 import android.support.test.uiautomator.BySelector;
@@ -21,6 +22,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Date;
+import java.util.Map;
 
 @RunWith(AndroidJUnit4.class)
 public class BbkMiddleMarketTestCase extends PerforTestCase {
@@ -28,7 +30,7 @@ public class BbkMiddleMarketTestCase extends PerforTestCase {
     @Test
     public void compareTest() throws JSONException, FileNotFoundException {
         //匹配度测试
-        stopTestRecord();
+        startTestRecord();
         JSONObject obj = new JSONObject();
         FileInputStream fis1 = new FileInputStream("/sdcard/performance-test/1.png");
         FileInputStream fis2 = new FileInputStream("/sdcard/performance-test/2.png");
@@ -50,57 +52,24 @@ public class BbkMiddleMarketTestCase extends PerforTestCase {
     @Test
     public void launchBbkMiddleMarket() throws IOException, UiObjectNotFoundException, JSONException,
             InterruptedException {
-
         BySelector bySynBbkMarket = By.text("应用商店");
         Bitmap source_png = getHomeSourceScreen(bySynBbkMarket, BbkMiddleMarket.PACKAGE, "apk_button", 2000);
+        Rect refreshPngRect = new Rect(0,0,source_png.getWidth(),source_png.getHeight()-80);
+        Rect loadPngRect = new Rect(0,source_png.getHeight()-80,source_png.getWidth(),source_png.getHeight());
         for (int i = 0; i < mCount; i++) {
-            JSONObject obj = new JSONObject();
-            String loadTime = "";
-            int loadResult = 1;
-            int refreshResult = 1;
-            boolean loadFlag = true;
             swipeCurrentLauncher();
             mDevice.wait(Until.hasObject(bySynBbkMarket), WAIT_TIME);
             UiObject2 bbkMarket = mDevice.findObject(bySynBbkMarket);
-            Date timeStamp1 = new Date();
             startTestRecord();
             bbkMarket.clickAndWait(Until.newWindow(), WAIT_TIME);
-            int m = 0;
-            do {
-                m++;
-                Bitmap des_png = mAutomation.takeScreenshot();
-                if (loadFlag) {
-                    obj.put(String.valueOf(m) + ":", loadFlag);
-                    loadResult = BitmapHelper.compare(Bitmap.createBitmap(source_png, 0, source_png.getHeight() - 70,
-                            source_png.getWidth(), 70), Bitmap.createBitmap(des_png, 0, des_png.getHeight() - 70,
-                            des_png
-                                    .getWidth(), 70));
-                    obj.put(String.valueOf(m) + "loadResult===:", loadResult);
-                }
-                if (loadResult <= 1 && loadFlag) {
-                    obj.put(String.valueOf(m) + "loadResult***:", loadResult);
-                    loadTime = getCurrentDate();
-                    loadFlag = false;
-                }
-                refreshResult = BitmapHelper.compare(Bitmap.createBitmap(source_png, 0, 0, source_png.getWidth(),
-                        source_png.getHeight() - 100), Bitmap.createBitmap(des_png, 0, 0, des_png.getWidth(), des_png
-                        .getHeight() - 100));
-                obj.put(String.valueOf(m) + "refreshResult:", refreshResult);
-                if (des_png != null && !des_png.isRecycled()) {
-                    des_png.recycle();
-                }
-                if ((new Date().getTime() - timeStamp1.getTime()) > WAIT_TIME * 5) {
-                    break;
-                }
-            } while (loadResult >= 1 || refreshResult >= 1);
-            String refreshTime = getCurrentDate();
+            Map<String, String> compareResult = doCompare(source_png, loadPngRect, refreshPngRect, new Date());
             mDevice.wait(Until.hasObject(By.res(BbkMiddleMarket.PACKAGE, "apk_button")), WAIT_TIME);
-            stopTestRecord(loadTime, refreshTime,String.valueOf(loadResult), String.valueOf(refreshResult));
+            stopTestRecord(compareResult.get("loadTime"), compareResult.get("refreshTime"), compareResult.get
+                    ("loadResult"), compareResult.get("refreshResult"));
             mDevice.pressHome();
-            instrumentationStatusOut(obj);
             clearRunprocess();
         }
-        if (source_png!=null && !source_png.isRecycled()) {
+        if (source_png != null && !source_png.isRecycled()) {
             source_png.recycle();
         }
     }

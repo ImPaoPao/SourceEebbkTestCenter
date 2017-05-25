@@ -30,10 +30,10 @@ import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import static android.os.SystemClock.sleep;
 import static android.support.test.InstrumentationRegistry.getArguments;
@@ -236,18 +236,18 @@ public class PerforTestCase extends Automator {
         return getHomeSourceScreen(bySelector, startPackage, null, waitTime);
     }
 
-    public List doCompare(Bitmap sourcePng, Rect loadPngRect,Date timeStamp) throws JSONException {
-        return doCompare(sourcePng,loadPngRect,null,timeStamp);
+    public Map<String, String> doCompare(Bitmap sourcePng, Rect loadPngRect, Date timeStamp) throws JSONException {
+        return doCompare(sourcePng, loadPngRect, null, timeStamp);
 
     }
 
-    public List doCompare(Bitmap sourcePng, Rect loadPngRect, Rect refreshPngRect, Date timeStamp) throws
+    public Map<String, String> doCompare(Bitmap sourcePng, Rect loadPngRect, Rect refreshPngRect, Date timeStamp) throws
             JSONException {
         JSONObject obj = new JSONObject();
         int m = 0;
-        List timeList = new ArrayList();
-        int loadResult = 1;
-        int refreshResult = 1;
+        Map<String, String> compareResult = new HashMap();
+        int loadResult = 2;
+        int refreshResult = 2;
         boolean loadFlag = true;
         do {
             m++;
@@ -265,29 +265,32 @@ public class PerforTestCase extends Automator {
             }
             if (loadResult <= 1 && loadFlag) {
                 obj.put(String.valueOf(m) + "loadResult***:", loadResult);
-                timeList.add(getCurrentDate());
+                compareResult.put("loadResult", String.valueOf(loadResult));
+                compareResult.put("loadTime", getCurrentDate());
                 loadFlag = false;
             }
             if (refreshPngRect != null) {
                 Bitmap refreshPng = Bitmap.createBitmap(des_png, refreshPngRect.left, refreshPngRect.top,
-                        refreshPngRect.width(),refreshPngRect.height());
-                refreshResult = BitmapHelper.compare(Bitmap.createBitmap(sourcePng, refreshPngRect.left, refreshPngRect.top,
-                        refreshPngRect.width(),refreshPngRect.height()), refreshPng);
+                        refreshPngRect.width(), refreshPngRect.height());
+                refreshResult = BitmapHelper.compare(Bitmap.createBitmap(sourcePng, refreshPngRect.left,
+                        refreshPngRect.top,
+                        refreshPngRect.width(), refreshPngRect.height()), refreshPng);
                 if (refreshPng != null && !refreshPng.isRecycled()) {
                     refreshPng.recycle();
                 }
-            }else{
-                refreshResult=loadResult;
+            } else {
+                refreshResult = loadResult;
             }
             obj.put(String.valueOf(m) + "refreshResult:", refreshResult);
-            if ((new Date().getTime() - timeStamp.getTime()) > WAIT_TIME * 5) {
+            if ((new Date().getTime() - timeStamp.getTime()) > WAIT_TIME * 4) {
                 break;
             }
-        } while (loadResult >= 1 || refreshResult >= 1);
-        timeList.add(getCurrentDate());
-        return timeList;
+        } while (loadResult > 1 || refreshResult > 1);
+        compareResult.put("refreshResult", String.valueOf(refreshResult));
+        compareResult.put("refreshTime", getCurrentDate());
+        instrumentationStatusOut(obj);
+        return compareResult;
     }
-
 }
 
 

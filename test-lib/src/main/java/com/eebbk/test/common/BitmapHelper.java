@@ -28,12 +28,6 @@ public class BitmapHelper {
                 diff++;
             }
         }
-        if (bitmap1 != null && !bitmap1.isRecycled()) {
-            bitmap1.recycle();
-        }
-        if (bitmap2 != null && !bitmap2.isRecycled()) {
-            bitmap2.recycle();
-        }
         return diff;
     }
 
