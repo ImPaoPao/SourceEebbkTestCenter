@@ -91,7 +91,8 @@ public class SyncEglishTestCase extends PerforTestCase {
         Rect refreshPngRect = new Rect(source_png.getWidth() / 2 - 100, source_png.getHeight() / 2, source_png
                 .getWidth() / 2 + 100, source_png.getHeight() / 2 + 60);
         SystemClock.sleep(1000);
-        clearRunprocess();
+        mDevice.pressBack();
+        mDevice.waitForIdle();
         for (int i = 0; i < mCount; i++) {
             mHelper.openSyncEnglishMain();
             mDevice.wait(Until.hasObject(By.res(SyncEnglish.PACKAGE, "add_id")), WAIT_TIME);
@@ -210,6 +211,8 @@ public class SyncEglishTestCase extends PerforTestCase {
             mDevice.waitForIdle();
         }
     }
+
+
 
     //书本内容界面点击flash按钮→flash页面加载完成
     @Test

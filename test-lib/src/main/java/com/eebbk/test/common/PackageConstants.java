@@ -23,6 +23,11 @@ public class PackageConstants {
         public static final String PACKAGE = "com.eebbk.synmath";
         public static final PackageResources R = new PackageResources(getTargetContext(), PACKAGE);
     }
+    public static final class MathAnimation {
+        public static final String PACKAGE = "com.eebbk.mathanimation";
+        public static final PackageResources R = new PackageResources(getTargetContext(), PACKAGE);
+    }
+
 
     // 一键搜 com.eebbk.onesearchdark
     public static final class OneSearchDark {
@@ -67,6 +72,7 @@ public class PackageConstants {
     }
 
     public static final class SystemUi {
+
         public static final String PACKAGE = "com.android.systemui";
         public static final PackageResources R = new PackageResources(getTargetContext(), PACKAGE);
     }

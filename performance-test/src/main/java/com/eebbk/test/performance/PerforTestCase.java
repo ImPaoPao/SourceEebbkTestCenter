@@ -247,20 +247,18 @@ public class PerforTestCase extends Automator {
         int m = 0;
         Map<String, String> compareResult = new HashMap();
         int loadResult = 2;
-        int refreshResult = 2;
+        int refreshResult = 3;
         boolean loadFlag = true;
         do {
             m++;
             Bitmap des_png = mAutomation.takeScreenshot();
-            Bitmap loadPng = Bitmap.createBitmap(des_png, loadPngRect.left, loadPngRect.top, loadPngRect.width(),
-                    loadPngRect.height());
             if (loadFlag) {
+                Bitmap loadPng = Bitmap.createBitmap(des_png, loadPngRect.left, loadPngRect.top, loadPngRect.width(),
+                        loadPngRect.height());
                 obj.put(String.valueOf(m) + ":", loadFlag);
                 loadResult = BitmapHelper.compare(Bitmap.createBitmap(sourcePng, loadPngRect.left, loadPngRect.top,
                         loadPngRect.width(), loadPngRect.height()), loadPng);
-                if (loadPng != null && !loadPng.isRecycled()) {
-                    loadPng.recycle();
-                }
+                //trying to use a recycled bitmap android.graphics.Bitmap@cdedded
                 obj.put(String.valueOf(m) + "loadResult===:", loadResult);
             }
             if (loadResult <= 1 && loadFlag) {
