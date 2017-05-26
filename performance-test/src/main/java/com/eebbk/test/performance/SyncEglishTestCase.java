@@ -134,7 +134,7 @@ public class SyncEglishTestCase extends PerforTestCase {
             UiObject2 click = child.getChildren().get(1);
             startTestRecord();
             click.clickAndWait(Until.newWindow(), WAIT_TIME);
-            Map<String, String> compareResult = doCompare(source_png, loadPngRect, loadPngRect, new Date());
+            Map<String, String> compareResult = doCompare(source_png, loadPngRect, new Date());
             stopTestRecord(compareResult.get("loadTime"), compareResult.get("refreshTime"), compareResult.get
                     ("loadResult"), compareResult.get("refreshResult"));
             mDevice.waitForIdle();
@@ -170,7 +170,7 @@ public class SyncEglishTestCase extends PerforTestCase {
             startTestRecord();
             //点击头像
             mHelper.longClick(60, rt.height() / 2);
-            Map<String, String> compareResult = doCompare(source_png, loadPngRect, loadPngRect, new Date());
+            Map<String, String> compareResult = doCompare(source_png, loadPngRect, new Date());
             stopTestRecord(compareResult.get("loadTime"), compareResult.get("refreshTime"), compareResult.get
                     ("loadResult"), compareResult.get("refreshResult"));
             mDevice.pressBack();
@@ -204,7 +204,7 @@ public class SyncEglishTestCase extends PerforTestCase {
             startTestRecord();
             //点击趣味测试
             mHelper.longClick(rt.right - 45, rt.height() / 2);
-            Map<String, String> compareResult = doCompare(source_png, loadPngRect, loadPngRect, new Date());
+            Map<String, String> compareResult = doCompare(source_png, loadPngRect, new Date());
             stopTestRecord(compareResult.get("loadTime"), compareResult.get("refreshTime"), compareResult.get
                     ("loadResult"), compareResult.get("refreshResult"));
             mDevice.pressBack();
