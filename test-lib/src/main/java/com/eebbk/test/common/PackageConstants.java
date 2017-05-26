@@ -15,7 +15,7 @@ public class PackageConstants {
     }
 
     public static final class SynChinese {
-        public static final String PACKAGE = " com.eebbk.synchinese";
+        public static final String PACKAGE = "com.eebbk.synchinese";
         public static final PackageResources R = new PackageResources(getTargetContext(), PACKAGE);
     }
 

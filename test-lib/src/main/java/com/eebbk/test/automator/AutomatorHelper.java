@@ -19,13 +19,13 @@ import android.text.TextUtils;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.eebbk.test.common.PackageConstants;
+import com.eebbk.test.common.PackageConstants.SynChinese;
+import com.eebbk.test.common.PackageConstants.SystemUi;
 import com.eebbk.test.common.PackageConstants.BbkMiddleMarket;
 import com.eebbk.test.common.PackageConstants.EnglishTalk;
 import com.eebbk.test.common.PackageConstants.Launcher;
 import com.eebbk.test.common.PackageConstants.OneSearchDark;
 import com.eebbk.test.common.PackageConstants.QuestionDatabase;
-import com.eebbk.test.common.PackageConstants.SynChinese;
 import com.eebbk.test.common.PackageConstants.SynMath;
 import com.eebbk.test.common.PackageConstants.SyncEnglish;
 import com.eebbk.test.common.PackageConstants.Vision;
@@ -80,8 +80,8 @@ public class AutomatorHelper {
 
     public void unlock() {
         wakeUp();
-        UiObject2 lock = mDevice.findObject(By.res(PackageConstants.SystemUi.PACKAGE,"userwallpaper"));
-        if(lock!=null && mDevice.hasObject(By.res(PackageConstants.SystemUi.PACKAGE,"keyguard_host_view"))){
+        UiObject2 lock = mDevice.findObject(By.res(SystemUi.PACKAGE,"userwallpaper"));
+        if(lock!=null && mDevice.hasObject(By.res(SystemUi.PACKAGE,"keyguard_host_view"))){
             Point p = lock.getVisibleCenter();
             mDevice.swipe(p.x,p.y,p.x,0,5);
             mDevice.pressHome();
@@ -341,11 +341,6 @@ public class AutomatorHelper {
             mDevice.wait(Until.hasObject(By.res(SynMath.PACKAGE, "menu_back_btn")), WAIT_TIME);
         }
     }
-
-    public void openSynChinese() {
-        openIcon("同步语文", SynChinese.PACKAGE);
-    }
-
     public void openSynMath() {
         openIcon("同步数学", SynMath.PACKAGE);
         mDevice.waitForIdle();
@@ -358,6 +353,12 @@ public class AutomatorHelper {
             }
         }
     }
+
+    public void openSynChinese() {
+        openIcon("同步语文", SynChinese.PACKAGE);
+        mDevice.waitForIdle();
+    }
+
 
     public void openVtraining() {
         openIcon("名师辅导", Vtraining.PACKAGE);

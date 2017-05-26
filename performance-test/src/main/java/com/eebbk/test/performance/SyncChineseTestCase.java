@@ -3,6 +3,7 @@ package com.eebbk.test.performance;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.os.RemoteException;
+import android.os.SystemClock;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.By;
 import android.support.test.uiautomator.BySelector;
@@ -48,6 +49,7 @@ public class SyncChineseTestCase extends PerforTestCase {
     }
 
 
+
     //添加按钮 界面加载完成
     @Test
     public void addChineseBook() {
@@ -72,6 +74,7 @@ public class SyncChineseTestCase extends PerforTestCase {
 
     }
 
+
     //书本内容界面点击头像→个人信息页面加载完成
     @Test
     public void synChineseSelfInfo() {
@@ -86,8 +89,33 @@ public class SyncChineseTestCase extends PerforTestCase {
 
     //书架界面10本书，点击刷新→刷新完成
     @Test
-    public void synChineseRefresh() {
-
+    public void synChineseRefresh() throws IOException, JSONException {
+        //首页:刷新 com.eebbk.synchinese:id/refresh
+        //图书列表:android.widget.ListView
+        //删除 com.eebbk.synchinese:id/edit
+        mHelper.openSynChinese();
+        mDevice.wait(Until.hasObject(By.res(SynChinese.PACKAGE, "refresh")), WAIT_TIME);
+        Bitmap source_png = mHelper.takeScreenshot(mNumber);
+        //中间刷新的那个黑色的带彩色点的小方块
+        Rect loadPngRect = new Rect(source_png.getWidth() / 2 - 40, source_png.getHeight() / 2 - 40,
+                source_png.getWidth() / 2 + 40, source_png.getHeight() / 2 + 40);
+        SystemClock.sleep(1000);
+        clearRunprocess();
+        for (int i = 0; i < mCount; i++) {
+            mHelper.openSynChinese();
+            UiObject2 refresh = mDevice.findObject(By.res(SynChinese.PACKAGE, "refresh"));
+            startTestRecord();
+            refresh.clickAndWait(Until.newWindow(), WAIT_TIME);
+            SystemClock.sleep(200);
+            Map<String, String> compareResult = doCompare(source_png, loadPngRect, new Date());
+            stopTestRecord(compareResult.get("loadTime"), compareResult.get("refreshTime"), compareResult.get
+                    ("loadResult"), compareResult.get("refreshResult"));
+            mDevice.waitForIdle();
+            SystemClock.sleep(2000);
+        }
+        if (!source_png.isRecycled()) {
+            source_png.recycle();
+        }
     }
 
 }
