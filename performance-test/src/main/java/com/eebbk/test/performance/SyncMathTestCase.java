@@ -282,31 +282,32 @@ public class SyncMathTestCase extends PerforTestCase {
         detailBook.clickAndWait(Until.newWindow(), WAIT_TIME);
         mDevice.wait(Until.hasObject(By.res(SynMath.PACKAGE, "menuBtnId")), WAIT_TIME);
         book = mDevice.findObject(By.res(SynMath.PACKAGE, "menuBtnId"));
-        book.clickAndWait(Until.newWindow(),WAIT_TIME);
+        book.clickAndWait(Until.newWindow(), WAIT_TIME);
         UiObject2 explanation = mDevice.findObject(By.text("知识讲解"));
-        explanation.clickAndWait(Until.newWindow(),WAIT_TIME);
+        explanation.clickAndWait(Until.newWindow(), WAIT_TIME);
         Bitmap source_png = mHelper.takeScreenshot(mNumber);
         SystemClock.sleep(1000);
-        Rect loadPngRect = new Rect(0, 0, source_png.getWidth(), source_png.getHeight());
+        Rect loadPngRect = new Rect(0, 150, source_png.getWidth(), source_png.getHeight());
         clearRunprocess();
         for (int i = 0; i < mCount; i++) {
             mHelper.openSynMathBook();
-            book = mDevice.findObject(By.res(SynMath.PACKAGE, "menu_book_btn"));
-            book.clickAndWait(Until.newWindow(), WAIT_TIME);
-            list = mDevice.findObject(By.res(SynMath.PACKAGE, "treelist"));
-            children = list.getChildren();
+            UiObject2 book2 = mDevice.findObject(By.res(SynMath.PACKAGE, "menu_book_btn"));
+            book2.clickAndWait(Until.newWindow(), WAIT_TIME);
+            UiObject2 list2 = mDevice.findObject(By.res(SynMath.PACKAGE, "treelist"));
+            children = list2.getChildren();
             detailBook = children.get(1);//第一课时
             detailBook.clickAndWait(Until.newWindow(), WAIT_TIME);
             mDevice.wait(Until.hasObject(By.res(SynMath.PACKAGE, "menuBtnId")), WAIT_TIME);
             detailBook = mDevice.findObject(By.res(SynMath.PACKAGE, "menuBtnId"));
-            detailBook.clickAndWait(Until.newWindow(),WAIT_TIME);
-            explanation = mDevice.findObject(By.text("知识讲解"));
+            detailBook.clickAndWait(Until.newWindow(), WAIT_TIME);
+            UiObject2 explanation2 = mDevice.findObject(By.text("知识讲解"));
             startTestRecord();
-            explanation.clickAndWait(Until.newWindow(),WAIT_TIME);
+            mHelper.longClick(explanation2);
+//            explanation2.click();
+            SystemClock.sleep(200);
             Map<String, String> compareResult = doCompare(source_png, loadPngRect, new Date());
             stopTestRecord(compareResult.get("loadTime"), compareResult.get("refreshTime"), compareResult.get
                     ("loadResult"), compareResult.get("refreshResult"));
-            SystemClock.sleep(1000);
             mDevice.pressBack();
             mDevice.waitForIdle();
         }

@@ -251,20 +251,24 @@ public class PerforTestCase extends Automator {
         boolean loadFlag = true;
         do {
             m++;
+            obj.put(String.valueOf(m) + "startScreen:", getCurrentDate());
             Bitmap des_png = mAutomation.takeScreenshot();
+            obj.put(String.valueOf(m) + "endScreen:", getCurrentDate());
             if (loadFlag) {
                 Bitmap loadPng = Bitmap.createBitmap(des_png, loadPngRect.left, loadPngRect.top, loadPngRect.width(),
                         loadPngRect.height());
                 obj.put(String.valueOf(m) + ":", loadFlag);
+                obj.put(String.valueOf(m) + "start:", mStartTime);
                 loadResult = BitmapHelper.compare(Bitmap.createBitmap(sourcePng, loadPngRect.left, loadPngRect.top,
                         loadPngRect.width(), loadPngRect.height()), loadPng);
                 //trying to use a recycled bitmap android.graphics.Bitmap@cdedded
                 obj.put(String.valueOf(m) + "loadResult===:", loadResult);
             }
             if (loadResult <= 1 && loadFlag) {
-                obj.put(String.valueOf(m) + "loadResult***:", loadResult);
                 compareResult.put("loadResult", String.valueOf(loadResult));
                 compareResult.put("loadTime", getCurrentDate());
+                obj.put(String.valueOf(m) + "loadResult***:", loadResult);
+                obj.put(String.valueOf(m) + "loadTime***:", getCurrentDate());
                 loadFlag = false;
             }
             if (refreshPngRect != null) {

@@ -53,6 +53,7 @@ public class SyncEglishTestCase extends PerforTestCase {
     }
 
     //前置条件：首页下载好十本书
+    //书架界面10本书，点击刷新→刷新完成
     @Test
     public void synEnglishRefresh() throws IOException, JSONException, InterruptedException {
         mHelper.openSyncEnglishMain();
@@ -144,7 +145,6 @@ public class SyncEglishTestCase extends PerforTestCase {
         }
     }
 
-
     //书本内容界面点击头像→个人信息页面加载完成
     @Test
     public void syncEnglishSelfInfo() throws FileNotFoundException, JSONException {
@@ -211,8 +211,6 @@ public class SyncEglishTestCase extends PerforTestCase {
             mDevice.waitForIdle();
         }
     }
-
-
 
     //书本内容界面点击flash按钮→flash页面加载完成
     @Test
