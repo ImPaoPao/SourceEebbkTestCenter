@@ -24,7 +24,7 @@ public class VtrainingTestCase extends PerforTestCase {
     @Test
     public void launchVtraining() throws IOException, UiObjectNotFoundException, InterruptedException, JSONException {
         BySelector byVtrain = By.text("名师辅导班");
-        Bitmap source_png = getHomeSourceScreen(byVtrain, Vtraining.PACKAGE, "my_plan_banner_scale_id", 10000);
+        Bitmap source_png = getHomeSourceScreen(byVtrain, Vtraining.PACKAGE, "my_plan_banner_scale_id", 20000);
         Rect refreshPngRect = new Rect(0,0,source_png.getWidth(),source_png.getHeight()-70);
         Rect loadPngRect = new Rect(0,source_png.getHeight()-70,source_png.getWidth(),source_png.getHeight());
         for (int i = 0; i < mCount; i++) {

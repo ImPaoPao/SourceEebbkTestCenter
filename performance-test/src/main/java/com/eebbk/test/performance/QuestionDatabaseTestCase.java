@@ -30,7 +30,7 @@ public class QuestionDatabaseTestCase extends PerforTestCase {
         JSONObject obj = new JSONObject();
         BySelector byQuestionDb = By.text("好题精练");
         Bitmap source_png = getHomeSourceScreen(byQuestionDb, QuestionDatabase.PACKAGE,
-                "exercise_main_default_banner", 5000);
+                "exercise_main_default_banner", 10000);
         Rect refreshPngRect = new Rect(0,0,source_png.getWidth(),source_png.getHeight()-60);
         Rect loadPngRect = new Rect(0,source_png.getHeight()-60,source_png.getWidth(),source_png.getHeight());
         for (int i = 0; i < mCount; i++) {

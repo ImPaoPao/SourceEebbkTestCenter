@@ -55,7 +55,7 @@ public class BbkMiddleMarketTestCase extends PerforTestCase {
     public void launchBbkMiddleMarket() throws IOException, UiObjectNotFoundException, JSONException,
             InterruptedException {
         BySelector bySynBbkMarket = By.text("应用商店");
-        Bitmap source_png = getHomeSourceScreen(bySynBbkMarket, BbkMiddleMarket.PACKAGE, "apk_button", 2000);
+        Bitmap source_png = getHomeSourceScreen(bySynBbkMarket, BbkMiddleMarket.PACKAGE, "apk_button", 10000);
         Rect refreshPngRect = new Rect(0, 0, source_png.getWidth(), source_png.getHeight() - 80);
         Rect loadPngRect = new Rect(0, source_png.getHeight() - 70, source_png.getWidth(), source_png.getHeight());
         for (int i = 0; i < mCount; i++) {

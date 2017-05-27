@@ -280,6 +280,8 @@ public class AutomatorHelper {
         openIcon(title, null);
     }
 
+
+
     //打开同步英语初始化首页
     public void openSyncEnglish() {
         openIcon("同步英语", SyncEnglish.PACKAGE);
@@ -358,6 +360,10 @@ public class AutomatorHelper {
         openIcon("同步语文", SynChinese.PACKAGE);
         mDevice.waitForIdle();
     }
+    public void openEnglishTalkBook(){
+
+    }
+
 
 
     public void openVtraining() {

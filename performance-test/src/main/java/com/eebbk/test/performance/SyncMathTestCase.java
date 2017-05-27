@@ -62,6 +62,7 @@ public class SyncMathTestCase extends PerforTestCase {
         UiObject2 bookList = mDevice.findObject(By.res(SynMath.PACKAGE, "book_list"));
         Rect rt = bookList.getVisibleBounds();
         mDevice.waitForIdle();
+        SystemClock.sleep(10000);
         Bitmap source_png = mHelper.takeScreenshot(mNumber);
         Rect loadPngRect = new Rect(0, 0, source_png.getWidth(), 80);
         //界面刷新出来
@@ -179,6 +180,7 @@ public class SyncMathTestCase extends PerforTestCase {
         UiObject2 download = mDevice.findObject(By.res(SynMath.PACKAGE, "add_download_button"));
         download.clickAndWait(Until.newWindow(), WAIT_TIME);
         mDevice.wait(Until.hasObject(By.res(MathAnimation.PACKAGE, "actionSlideExpandableListView1")), WAIT_TIME * 4);
+        SystemClock.sleep(10000);
         Bitmap source_png = mHelper.takeScreenshot(mNumber);
         SystemClock.sleep(1000);
         Rect loadPngRect = new Rect(0, 0, source_png.getWidth(), 80);
