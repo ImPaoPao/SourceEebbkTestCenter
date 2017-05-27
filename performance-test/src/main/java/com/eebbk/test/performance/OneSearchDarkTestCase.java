@@ -24,7 +24,7 @@ public class OneSearchDarkTestCase extends PerforTestCase {
     @Test
     public void launchOneSearch() throws IOException, UiObjectNotFoundException, JSONException, InterruptedException {
         BySelector byOneSearch = By.text("一键搜");
-        Bitmap source_png = getHomeSourceScreen(byOneSearch,OneSearchDark.PACKAGE,"btn_start_one_search",1000);
+        Bitmap source_png = getHomeSourceScreen(byOneSearch,OneSearchDark.PACKAGE,"btn_start_one_search",5000);
         Rect refreshPngRect = new Rect(0,0,source_png.getWidth(),source_png.getHeight()-100);
         Rect loadPngRect = new Rect(0,source_png.getHeight()-100,source_png.getWidth(),source_png.getHeight());
         for (int i = 0; i < mCount; i++) {

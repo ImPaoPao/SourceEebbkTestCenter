@@ -48,5 +48,9 @@ public class EnglishTalkTestCase extends PerforTestCase {
             source_png.recycle();
         }
     }
-
+    //选择教材添加后，点击教材目录→进入播放界面
+    //播放界面，点击右下角目录按钮→目录加载完成
+    //播放界面，点击目录按钮中任意目录→播放内容加载完成
+    //点击banner口语达人→界面内容加载完成
+    //点击我的排行→排行榜加载完成
 }

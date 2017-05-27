@@ -18,6 +18,16 @@ public class PackageConstants {
         public static final String PACKAGE = "com.eebbk.synchinese";
         public static final PackageResources R = new PackageResources(getTargetContext(), PACKAGE);
     }
+    //汉字学习
+    public static final class HanziLearning {
+        public static final String PACKAGE = "com.eebbk.hanziLearning.activity";
+        public static final PackageResources R = new PackageResources(getTargetContext(), PACKAGE);
+    }
+    //描红词典
+    public static final class EebbkDict {
+        public static final String PACKAGE = "com.eebbk.dict";
+        public static final PackageResources R = new PackageResources(getTargetContext(), PACKAGE);
+    }
 
     public static final class SynMath {
         public static final String PACKAGE = "com.eebbk.synmath";

@@ -246,8 +246,8 @@ public class PerforTestCase extends Automator {
         JSONObject obj = new JSONObject();
         int m = 0;
         Map<String, String> compareResult = new HashMap();
-        int loadResult = 2;
-        int refreshResult = 3;
+        int loadResult = 0;
+        int refreshResult = 0;
         boolean loadFlag = true;
         do {
             m++;

@@ -32,8 +32,8 @@ public class BbkMiddleMarketTestCase extends PerforTestCase {
         //匹配度测试
         startTestRecord();
         JSONObject obj = new JSONObject();
-        FileInputStream fis1 = new FileInputStream("/sdcard/performance-test/1.png");
-        FileInputStream fis2 = new FileInputStream("/sdcard/performance-test/2.png");
+        FileInputStream fis1 = new FileInputStream("/sdcard/tt.png");
+        FileInputStream fis2 = new FileInputStream("/sdcard/tt1.png");
 //        Bitmap png1 = Bitmap.createBitmap(BitmapFactory.decodeStream(fis1),mDevice.getDisplayWidth()
 //                / 2 - 30, mDevice.getDisplayHeight() / 2 - 30, 60, 60);
 //        Bitmap png2 = Bitmap.createBitmap(BitmapFactory.decodeStream(fis2),mDevice.getDisplayWidth()
@@ -44,6 +44,8 @@ public class BbkMiddleMarketTestCase extends PerforTestCase {
         obj.put("compare result 2 ", BitmapHelper.compare(BitmapFactory.decodeStream
                 (fis1), BitmapFactory.decodeStream(fis2)));
 //        obj.put("compare result", BitmapHelper.compare(png1,png2));
+//        mHelper.takeScreenshot(new Rect(0, mDevice.getDisplayHeight() / 4, mDevice.getDisplayWidth() * 2 / 5,
+//                mDevice.getDisplayHeight() * 3 / 4), new File("/sdcard/tt1.png"), 1);
         instrumentationStatusOut(obj);
         stopTestRecord();
     }
@@ -54,8 +56,8 @@ public class BbkMiddleMarketTestCase extends PerforTestCase {
             InterruptedException {
         BySelector bySynBbkMarket = By.text("应用商店");
         Bitmap source_png = getHomeSourceScreen(bySynBbkMarket, BbkMiddleMarket.PACKAGE, "apk_button", 2000);
-        Rect refreshPngRect = new Rect(0,0,source_png.getWidth(),source_png.getHeight()-80);
-        Rect loadPngRect = new Rect(0,source_png.getHeight()-80,source_png.getWidth(),source_png.getHeight());
+        Rect refreshPngRect = new Rect(0, 0, source_png.getWidth(), source_png.getHeight() - 80);
+        Rect loadPngRect = new Rect(0, source_png.getHeight() - 70, source_png.getWidth(), source_png.getHeight());
         for (int i = 0; i < mCount; i++) {
             swipeCurrentLauncher();
             mDevice.wait(Until.hasObject(bySynBbkMarket), WAIT_TIME);
