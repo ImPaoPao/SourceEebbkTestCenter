@@ -66,7 +66,7 @@ public class DisciplineTestCase extends PerforTestCase {
         UiObject2 bookList = mDevice.findObject(By.res(SynStudy.PACKAGE, "book_list"));
         Rect rt = bookList.getVisibleBounds();
         mDevice.waitForIdle();
-        SystemClock.sleep(10000);
+        SystemClock.sleep(20000);
         Bitmap source_png = mHelper.takeScreenshot(mNumber);
         Rect loadPngRect = new Rect(0, 0, source_png.getWidth(), 80);
         //界面刷新出来

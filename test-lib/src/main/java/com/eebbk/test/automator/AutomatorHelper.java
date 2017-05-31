@@ -363,8 +363,6 @@ public class AutomatorHelper {
 
     public void openEnglishTalkBook() {
         openEnglishTalk();
-
-
     }
 
 

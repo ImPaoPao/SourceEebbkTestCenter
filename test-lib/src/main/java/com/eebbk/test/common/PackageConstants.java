@@ -55,7 +55,7 @@ public class PackageConstants {
 
     // 一键搜 com.eebbk.onesearchdark
     public static final class OneSearchDark {
-        public static final String PACKAGE = "c";
+        public static final String PACKAGE = "com.eebbk.onesearchdark";
         public static final PackageResources R = new PackageResources(getTargetContext(), PACKAGE);
     }
 
