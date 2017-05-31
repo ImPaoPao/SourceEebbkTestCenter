@@ -86,11 +86,11 @@ public class SyncEglishTestCase extends PerforTestCase {
         UiObject2 add = mDevice.findObject(By.res(SyncEnglish.PACKAGE, "add_id"));
         add.clickAndWait(Until.newWindow(), WAIT_TIME);
         mDevice.wait(Until.hasObject(By.res(SyncEnglish.PACKAGE, "iv_cover")), WAIT_TIME * 4);
+        SystemClock.sleep(20000);
         Bitmap source_png = mHelper.takeScreenshot(mNumber);
         Rect loadPngRect = new Rect(0, 0, source_png.getWidth(), 80);
         //中间 "正在加载"刷新框
-        Rect refreshPngRect = new Rect(source_png.getWidth() / 2 - 100, source_png.getHeight() / 2, source_png
-                .getWidth() / 2 + 100, source_png.getHeight() / 2 + 60);
+        Rect refreshPngRect = new Rect(0, 100, source_png.getWidth(), source_png.getHeight());
         SystemClock.sleep(1000);
         mDevice.pressBack();
         mDevice.waitForIdle();
@@ -122,9 +122,10 @@ public class SyncEglishTestCase extends PerforTestCase {
         UiObject2 child = children.get(children.size() / 2);
         child.getChildren().get(1).clickAndWait(Until.newWindow(), WAIT_TIME);
         mDevice.waitForIdle();
+        SystemClock.sleep(5000);
         Bitmap source_png = mHelper.takeScreenshot(mNumber);
         SystemClock.sleep(1000);
-        Rect loadPngRect = new Rect(0, 0, source_png.getWidth(), source_png.getHeight());
+        Rect loadPngRect = new Rect(0, source_png.getHeight()/2, source_png.getWidth(), source_png.getHeight());
         clearRunprocess();
         for (int i = 0; i < mCount; i++) {
             mHelper.openSyncEnglishMain();
@@ -160,7 +161,7 @@ public class SyncEglishTestCase extends PerforTestCase {
         //截图保存
         Bitmap source_png = mHelper.takeScreenshot(mNumber);
         SystemClock.sleep(1000);
-        Rect loadPngRect = new Rect(0, source_png.getHeight() / 2, source_png.getWidth(), source_png.getHeight());
+        Rect loadPngRect = new Rect(0, source_png.getHeight()-400, source_png.getWidth(), source_png.getHeight());
         mDevice.pressBack();
         mDevice.waitForIdle();
         for (int i = 0; i < mCount; i++) {
@@ -169,7 +170,8 @@ public class SyncEglishTestCase extends PerforTestCase {
             SystemClock.sleep(2000);
             startTestRecord();
             //点击头像
-            mHelper.longClick(60, rt.height() / 2);
+            //mHelper.longClick(60, rt.height() / 2);
+            mDevice.click(60, rt.height() / 2);
             Map<String, String> compareResult = doCompare(source_png, loadPngRect, new Date());
             stopTestRecord(compareResult.get("loadTime"), compareResult.get("refreshTime"), compareResult.get
                     ("loadResult"), compareResult.get("refreshResult"));
@@ -190,7 +192,7 @@ public class SyncEglishTestCase extends PerforTestCase {
         //点击趣味测试
         mHelper.longClick(rt.right - 45, rt.height() / 2);
         mDevice.waitForIdle();
-        SystemClock.sleep(2000);
+        SystemClock.sleep(5000);
         //截图保存
         Bitmap source_png = mHelper.takeScreenshot(mNumber);
         SystemClock.sleep(1000);
@@ -241,23 +243,22 @@ public class SyncEglishTestCase extends PerforTestCase {
         startTestRecord();
         mHelper.longClick(mDevice.getDisplayWidth() / 4, mDevice.getDisplayHeight() / 2);
         mDevice.wait(Until.hasObject(By.res(BbkMiddleMarket.PACKAGE, "apk_button")), WAIT_TIME);
-        mDevice.waitForIdle();
+        SystemClock.sleep(10000);
         //截图保存
         Bitmap source_png = mHelper.takeScreenshot(mNumber);
         SystemClock.sleep(1000);
         Rect refreshPngRect = new Rect(0, 0, source_png.getWidth(), source_png.getHeight() - 80);
-        Rect loadPngRect = new Rect(0, source_png.getHeight() - 80, source_png.getWidth(), source_png.getHeight());
+        Rect loadPngRect = new Rect(0, source_png.getHeight() - 40, source_png.getWidth(), source_png.getHeight());
         mDevice.pressBack();
         mDevice.waitForIdle();
         for (int i = 0; i < mCount; i++) {
-            //点击下拉环
-            mHelper.longClick(rt.right - 35, rt.height() / 2);
-            SystemClock.sleep(2000);
-            Date timeStamp1 = new Date();
-            int m = 0;
+//            //点击下拉环
+//            mHelper.longClick(rt.right - 35, rt.height() / 2);
+//            SystemClock.sleep(2000);
             startTestRecord();
             //点击欧拉英语
-            mHelper.longClick(mDevice.getDisplayWidth() / 4, mDevice.getDisplayHeight() / 2);
+            mDevice.click(mDevice.getDisplayWidth() / 4, mDevice.getDisplayHeight() / 2);
+            //mHelper.longClick(mDevice.getDisplayWidth() / 4, mDevice.getDisplayHeight() / 2);
             Map<String, String> compareResult = doCompare(source_png, loadPngRect, refreshPngRect, new Date());
             stopTestRecord(compareResult.get("loadTime"), compareResult.get("refreshTime"), compareResult.get
                     ("loadResult"), compareResult.get("refreshResult"));

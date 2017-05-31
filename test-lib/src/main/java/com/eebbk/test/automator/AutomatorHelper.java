@@ -19,15 +19,15 @@ import android.text.TextUtils;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.eebbk.test.common.PackageConstants.SynChinese;
-import com.eebbk.test.common.PackageConstants.SystemUi;
 import com.eebbk.test.common.PackageConstants.BbkMiddleMarket;
 import com.eebbk.test.common.PackageConstants.EnglishTalk;
 import com.eebbk.test.common.PackageConstants.Launcher;
 import com.eebbk.test.common.PackageConstants.OneSearchDark;
 import com.eebbk.test.common.PackageConstants.QuestionDatabase;
+import com.eebbk.test.common.PackageConstants.SynChinese;
 import com.eebbk.test.common.PackageConstants.SynMath;
 import com.eebbk.test.common.PackageConstants.SyncEnglish;
+import com.eebbk.test.common.PackageConstants.SystemUi;
 import com.eebbk.test.common.PackageConstants.Vision;
 import com.eebbk.test.common.PackageConstants.Vtraining;
 
@@ -80,10 +80,10 @@ public class AutomatorHelper {
 
     public void unlock() {
         wakeUp();
-        UiObject2 lock = mDevice.findObject(By.res(SystemUi.PACKAGE,"userwallpaper"));
-        if(lock!=null && mDevice.hasObject(By.res(SystemUi.PACKAGE,"keyguard_host_view"))){
+        UiObject2 lock = mDevice.findObject(By.res(SystemUi.PACKAGE, "userwallpaper"));
+        if (lock != null && mDevice.hasObject(By.res(SystemUi.PACKAGE, "keyguard_host_view"))) {
             Point p = lock.getVisibleCenter();
-            mDevice.swipe(p.x,p.y,p.x,0,5);
+            mDevice.swipe(p.x, p.y, p.x, 0, 5);
             mDevice.pressHome();
         }
     }
@@ -281,7 +281,6 @@ public class AutomatorHelper {
     }
 
 
-
     //打开同步英语初始化首页
     public void openSyncEnglish() {
         openIcon("同步英语", SyncEnglish.PACKAGE);
@@ -343,6 +342,7 @@ public class AutomatorHelper {
             mDevice.wait(Until.hasObject(By.res(SynMath.PACKAGE, "menu_back_btn")), WAIT_TIME);
         }
     }
+
     public void openSynMath() {
         openIcon("同步数学", SynMath.PACKAGE);
         mDevice.waitForIdle();
@@ -360,10 +360,12 @@ public class AutomatorHelper {
         openIcon("同步语文", SynChinese.PACKAGE);
         mDevice.waitForIdle();
     }
-    public void openEnglishTalkBook(){
+
+    public void openEnglishTalkBook() {
+        openEnglishTalk();
+
 
     }
-
 
 
     public void openVtraining() {
@@ -382,8 +384,25 @@ public class AutomatorHelper {
         openIcon("一键搜", OneSearchDark.PACKAGE);
     }
 
+    public void openEnglishTalkContent() {
+        UiObject2 addBook;
+        openEnglishTalk();
+        mDevice.wait(Until.hasObject(By.text("听说材料")), WAIT_TIME);
+        UiObject2 talk = mDevice.findObject(By.text("听说材料"));
+        talk.clickAndWait(Until.newWindow(),WAIT_TIME);
+        mDevice.wait(Until.hasObject(By.res(EnglishTalk.PACKAGE, "database_list_listview_id")), WAIT_TIME);
+        UiObject2 listBook = mDevice.findObject(By.res(EnglishTalk.PACKAGE, "database_list_listview_id"));
+        List<UiObject2> children = listBook.getChildren();
+        addBook = children.get(0);
+        addBook.clickAndWait(Until.newWindow(), WAIT_TIME);
+        mDevice.wait(Until.hasObject(By.res(EnglishTalk.PACKAGE, "detail_book_join_id")), WAIT_TIME * 4);
+    }
     public void openEnglishTalk() {
         openIcon("英语听说", EnglishTalk.PACKAGE);
+        mDevice.wait(Until.hasObject(By.text("学习")), WAIT_TIME);
+        UiObject2 study = mDevice.findObject(By.text("学习"));
+        study.clickAndWait(Until.newWindow(),WAIT_TIME);
+        mDevice.waitForIdle();
     }
 
     public void openBbkMiddleMarket() {

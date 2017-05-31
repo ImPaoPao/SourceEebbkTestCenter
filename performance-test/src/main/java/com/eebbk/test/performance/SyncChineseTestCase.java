@@ -79,6 +79,7 @@ public class SyncChineseTestCase extends PerforTestCase {
         UiObject2 bookList = mDevice.findObject(By.res(SynChinese.PACKAGE, "book_list"));
         Rect rt = bookList.getVisibleBounds();
         mDevice.waitForIdle();
+        SystemClock.sleep(10000);
         Bitmap source_png = mHelper.takeScreenshot(mNumber);
         Rect loadPngRect = new Rect(0, 0, source_png.getWidth(), 80);
         //界面刷新出来
@@ -139,15 +140,15 @@ public class SyncChineseTestCase extends PerforTestCase {
     public void showDetailsSynChineseBook() throws IOException, JSONException {
         openOneChineseBook();
         mDevice.click(mDevice.getDisplayWidth() / 2, mDevice.getDisplayHeight() / 3);
-        SystemClock.sleep(5000);
+        SystemClock.sleep(10000);
         Bitmap source_png = mHelper.takeScreenshot(mNumber);
         SystemClock.sleep(1000);
-        Rect loadPngRect = new Rect(0, 0, source_png.getWidth(), source_png.getHeight());
+        Rect loadPngRect = new Rect(0, 0, source_png.getWidth(), 180);
         clearRunprocess();
         for (int i = 0; i < mCount; i++) {
             openOneChineseBook();
             startTestRecord();
-            mDevice.click(mDevice.getDisplayWidth() / 2, mDevice.getDisplayHeight() / 3);
+            mHelper.longClick(mDevice.getDisplayWidth() / 2,mDevice.getDisplayHeight() / 3);
             Map<String, String> compareResult = doCompare(source_png, loadPngRect, new Date());
             stopTestRecord(compareResult.get("loadTime"), compareResult.get("refreshTime"), compareResult.get
                     ("loadResult"), compareResult.get("refreshResult"));
@@ -167,6 +168,7 @@ public class SyncChineseTestCase extends PerforTestCase {
         SystemClock.sleep(5000);//跳转到查字词 界面
         mHelper.longClick(640, 65);//点击查字典坐标
         mDevice.wait(Until.hasObject(By.res(EebbkDict.PACKAGE, "miaohong_dictedit")), WAIT_TIME);//描红词典界面
+        SystemClock.sleep(5000);
         Bitmap source_png = mHelper.takeScreenshot(mNumber);
         SystemClock.sleep(1000);
         Rect loadPngRect = new Rect(0, 0, source_png.getWidth(), source_png.getHeight());

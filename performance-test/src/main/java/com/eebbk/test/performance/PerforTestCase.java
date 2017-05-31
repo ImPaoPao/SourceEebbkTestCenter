@@ -54,7 +54,7 @@ public class PerforTestCase extends Automator {
     public void setUp() throws Exception {
         super.setUp();
         clearRunprocess();
-        String count = getArguments().getString("count", "2");
+        String count = getArguments().getString("count", "5");
         String type = getArguments().getString("type", "0");
         mNumber = getArguments().getString("number", "unknown");
         if (TextUtils.isDigitsOnly(count)) {
@@ -94,49 +94,9 @@ public class PerforTestCase extends Automator {
         Log.i(TAG, "record endtime and infos");
         if (mStartTime != null) {
             try {
-                mXml.text("\n  ");
+                mXml.text("\n");
                 mXml.startTag(null, "Segment");
                 mXml.attribute(null, "starttime", mStartTime);
-                mXml.attribute(null, "endtime", getCurrentDate());
-                mXml.endTag(null, "Segment");
-            } catch (IOException e) {
-                // Nothing to do
-            }
-        }
-        mStartTime = null;
-    }
-
-
-    public void stopTestRecord(String loadtime) {
-        Log.i(TAG, "record endtime and infos");
-        if (mStartTime != null) {
-            try {
-                mXml.text("\n  ");
-                mXml.startTag(null, "Segment");
-                mXml.attribute(null, "starttime", mStartTime);
-                mXml.attribute(null, "loadtime", loadtime);
-                mXml.attribute(null, "endtime", getCurrentDate());
-                mXml.endTag(null, "Segment");
-            } catch (IOException e) {
-                // Nothing to do
-            }
-        }
-        mStartTime = null;
-    }
-
-    public void stopTestRecord(String loadtime, String startScreen, String endScreen, String compareTime, String
-            compareResult) {
-        Log.i(TAG, "record endtime and infos");
-        if (mStartTime != null) {
-            try {
-                mXml.text("\n  ");
-                mXml.startTag(null, "Segment");
-                mXml.attribute(null, "starttime", mStartTime);
-                mXml.attribute(null, "loadtime", loadtime);
-                mXml.attribute(null, "compareTime", compareTime);
-                mXml.attribute(null, "startScreen", startScreen);
-                mXml.attribute(null, "endScreen", endScreen);
-                mXml.attribute(null, "compareResult", compareResult);
                 mXml.attribute(null, "endtime", getCurrentDate());
                 mXml.endTag(null, "Segment");
             } catch (IOException e) {
@@ -150,7 +110,7 @@ public class PerforTestCase extends Automator {
         Log.i(TAG, "record endtime and infos");
         if (mStartTime != null) {
             try {
-                mXml.text("\n  ");
+                mXml.text("\n");
                 mXml.startTag(null, "Segment");
                 mXml.attribute(null, "starttime", mStartTime);
                 mXml.attribute(null, "loadtime", loadtime);
@@ -251,24 +211,19 @@ public class PerforTestCase extends Automator {
         boolean loadFlag = true;
         do {
             m++;
-            obj.put(String.valueOf(m) + "startScreen:", getCurrentDate());
             Bitmap des_png = mAutomation.takeScreenshot();
-            obj.put(String.valueOf(m) + "endScreen:", getCurrentDate());
             if (loadFlag) {
                 Bitmap loadPng = Bitmap.createBitmap(des_png, loadPngRect.left, loadPngRect.top, loadPngRect.width(),
                         loadPngRect.height());
-                obj.put(String.valueOf(m) + ":", loadFlag);
-                obj.put(String.valueOf(m) + "start:", mStartTime);
                 loadResult = BitmapHelper.compare(Bitmap.createBitmap(sourcePng, loadPngRect.left, loadPngRect.top,
                         loadPngRect.width(), loadPngRect.height()), loadPng);
-                //trying to use a recycled bitmap android.graphics.Bitmap@cdedded
-                obj.put(String.valueOf(m) + "loadResult===:", loadResult);
             }
             if (loadResult <= 1 && loadFlag) {
                 compareResult.put("loadResult", String.valueOf(loadResult));
                 compareResult.put("loadTime", getCurrentDate());
-                obj.put(String.valueOf(m) + "loadResult***:", loadResult);
-                obj.put(String.valueOf(m) + "loadTime***:", getCurrentDate());
+                obj.put(String.valueOf(m) + "loadResult***************:", loadResult);
+                obj.put(String.valueOf(m) + "loadtime***************:", getCurrentDate());
+                obj.put(String.valueOf(m) + "mStartTime***************:", mStartTime);
                 loadFlag = false;
             }
             if (refreshPngRect != null) {
@@ -288,6 +243,10 @@ public class PerforTestCase extends Automator {
                 break;
             }
         } while (loadResult > 1 || refreshResult > 1);
+        if (!compareResult.containsKey("loadTime")){
+            compareResult.put("loadTime", getCurrentDate());
+            compareResult.put("loadResult", String.valueOf(loadResult));
+        }
         compareResult.put("refreshResult", String.valueOf(refreshResult));
         compareResult.put("refreshTime", getCurrentDate());
         instrumentationStatusOut(obj);
