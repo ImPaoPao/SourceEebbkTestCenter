@@ -56,7 +56,6 @@ public class SyncMathTestCase extends PerforTestCase {
         //com.eebbk.synmath:id/net_data
         mHelper.openSynMath();
         UiObject2 add = mDevice.findObject(By.res(SynMath.PACKAGE, "net_data"));
-        startTestRecord();
         add.clickAndWait(Until.newWindow(), WAIT_TIME);
         mDevice.wait(Until.hasObject(By.res(SynMath.PACKAGE, "book_list")), WAIT_TIME * 4);
         UiObject2 bookList = mDevice.findObject(By.res(SynMath.PACKAGE, "book_list"));

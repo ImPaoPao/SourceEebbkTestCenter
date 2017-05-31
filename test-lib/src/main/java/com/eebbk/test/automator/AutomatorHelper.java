@@ -389,7 +389,7 @@ public class AutomatorHelper {
         openEnglishTalk();
         mDevice.wait(Until.hasObject(By.text("听说材料")), WAIT_TIME);
         UiObject2 talk = mDevice.findObject(By.text("听说材料"));
-        talk.clickAndWait(Until.newWindow(),WAIT_TIME);
+        talk.clickAndWait(Until.newWindow(), WAIT_TIME);
         mDevice.wait(Until.hasObject(By.res(EnglishTalk.PACKAGE, "database_list_listview_id")), WAIT_TIME);
         UiObject2 listBook = mDevice.findObject(By.res(EnglishTalk.PACKAGE, "database_list_listview_id"));
         List<UiObject2> children = listBook.getChildren();
@@ -397,13 +397,15 @@ public class AutomatorHelper {
         addBook.clickAndWait(Until.newWindow(), WAIT_TIME);
         mDevice.wait(Until.hasObject(By.res(EnglishTalk.PACKAGE, "detail_book_join_id")), WAIT_TIME * 4);
     }
+
     public void openEnglishTalk() {
         openIcon("英语听说", EnglishTalk.PACKAGE);
         mDevice.wait(Until.hasObject(By.text("学习")), WAIT_TIME);
         UiObject2 study = mDevice.findObject(By.text("学习"));
-        study.clickAndWait(Until.newWindow(),WAIT_TIME);
+        study.clickAndWait(Until.newWindow(), WAIT_TIME);
         mDevice.waitForIdle();
     }
+
 
     public void openBbkMiddleMarket() {
         openIcon("应用商店", BbkMiddleMarket.PACKAGE);

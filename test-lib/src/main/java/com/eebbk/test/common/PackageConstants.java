@@ -14,15 +14,28 @@ public class PackageConstants {
         public static final PackageResources R = new PackageResources(getTargetContext(), PACKAGE);
     }
 
+    public static final class Personal {
+        public static final String PACKAGE = "com.bbk.personal";
+        public static final PackageResources R = new PackageResources(getTargetContext(), PACKAGE);
+    }
+
+    //学科同步
+    public static final class SynStudy {
+        public static final String PACKAGE = "com.eebbk.synstudy";
+        public static final PackageResources R = new PackageResources(getTargetContext(), PACKAGE);
+    }
+
     public static final class SynChinese {
         public static final String PACKAGE = "com.eebbk.synchinese";
         public static final PackageResources R = new PackageResources(getTargetContext(), PACKAGE);
     }
+
     //汉字学习
     public static final class HanziLearning {
         public static final String PACKAGE = "com.eebbk.hanziLearning.activity";
         public static final PackageResources R = new PackageResources(getTargetContext(), PACKAGE);
     }
+
     //描红词典
     public static final class EebbkDict {
         public static final String PACKAGE = "com.eebbk.dict";
@@ -33,6 +46,7 @@ public class PackageConstants {
         public static final String PACKAGE = "com.eebbk.synmath";
         public static final PackageResources R = new PackageResources(getTargetContext(), PACKAGE);
     }
+
     public static final class MathAnimation {
         public static final String PACKAGE = "com.eebbk.mathanimation";
         public static final PackageResources R = new PackageResources(getTargetContext(), PACKAGE);
