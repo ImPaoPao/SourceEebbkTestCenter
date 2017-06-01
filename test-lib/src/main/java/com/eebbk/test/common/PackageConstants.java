@@ -9,6 +9,12 @@ public class PackageConstants {
         public static final PackageResources R = new PackageResources(getTargetContext(), PACKAGE);
     }
 
+
+    public static final class Android {
+        public static final String PACKAGE = "android";
+        public static final PackageResources R = new PackageResources(getTargetContext(), PACKAGE);
+    }
+
     public static final class Launcher {
         public static final String PACKAGE = "com.bbk.studyos.launcher";
         public static final PackageResources R = new PackageResources(getTargetContext(), PACKAGE);

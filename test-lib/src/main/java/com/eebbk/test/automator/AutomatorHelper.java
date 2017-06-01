@@ -367,7 +367,7 @@ public class AutomatorHelper {
 
 
     public void openVtraining() {
-        openIcon("名师辅导", Vtraining.PACKAGE);
+        openIcon("名师辅导班", Vtraining.PACKAGE);
     }
 
     public void openVision() {
