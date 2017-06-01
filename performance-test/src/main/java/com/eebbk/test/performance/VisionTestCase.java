@@ -53,23 +53,24 @@ public class VisionTestCase extends PerforTestCase {
         mHelper.openVision();
         SystemClock.sleep(1000);
         int rotation = mDevice.getDisplayRotation();
+        SystemClock.sleep(3000);
         mDevice.click(mDevice.getDisplayWidth() / 2, mDevice.getDisplayHeight() - 40);
         if (mDevice.getDisplayRotation() != rotation) {
             Bitmap source_png = mHelper.takeScreenshot(mNumber);
+            SystemClock.sleep(1000);
             Rect loadPngRect = new Rect(0, 0, source_png.getWidth() / 2, source_png.getHeight() / 2);
             Rect refreshPngRect = loadPngRect;
             mDevice.pressBack();
-            SystemClock.sleep(2000);
-            for (int i = 0; i < 2; i++) {
+            SystemClock.sleep(1000);
+            for (int i = 0; i < mCount; i++) {
                 startTestRecord();
                 mDevice.click(mDevice.getDisplayWidth() / 2, mDevice.getDisplayHeight() - 40);
                 Map<String, String> compareResult = doCompare(source_png, loadPngRect, refreshPngRect, new Date());
                 stopTestRecord(compareResult.get("loadTime"), compareResult.get("refreshTime"), compareResult.get
                         ("loadResult"), compareResult.get("refreshResult"));
                 SystemClock.sleep(1000);
-                mDevice.wait(Until.hasObject(By.res(Vision.PACKAGE, "vvEyeProtect")), WAIT_TIME);
                 mDevice.pressBack();
-                SystemClock.sleep(2000);
+                SystemClock.sleep(1000);
             }
             if (!source_png.isRecycled()) {
                 source_png.recycle();
@@ -82,26 +83,20 @@ public class VisionTestCase extends PerforTestCase {
     public void showVisionSettings() throws JSONException, FileNotFoundException, InterruptedException {
         mHelper.openVision();
         SystemClock.sleep(1000);
-        mDevice.click(mDevice.getDisplayWidth() / 2, mDevice.getDisplayHeight() - 40);
-
-//        mDevice. (Until.newWindow(), WAIT_TIME);
-        //mDevice.wait(Until.newWindow(),WAIT_TIME);
-        //mDevice.wait(Until.gone(By.res(Vision.PACKAGE, "restart_take_photo")), WAIT_TIME * 5);
-        SystemClock.sleep(1000);
-        //mDevice.wait(Until.hasObject(By.res(Vision.PACKAGE,"vvEyeProtect")), WAIT_TIME);
+        mDevice.click(mDevice.getDisplayWidth() -45, 65);
+        mDevice.wait(Until.hasObject(By.text("设置")), WAIT_TIME);
         Bitmap source_png = mHelper.takeScreenshot(mNumber);
+        SystemClock.sleep(1000);
         Rect loadPngRect = new Rect(0, 0, source_png.getWidth() / 2, source_png.getHeight() / 2);
         Rect refreshPngRect = loadPngRect;
         mDevice.pressBack();
-        SystemClock.sleep(2000);
-        for (int i = 0; i < 2; i++) {
+        SystemClock.sleep(1000);
+        for (int i = 0; i < mCount; i++) {
             startTestRecord();
-            mDevice.click(mDevice.getDisplayWidth() / 2, mDevice.getDisplayHeight() - 40);
+            mDevice.click(mDevice.getDisplayWidth() -45, 65);
             Map<String, String> compareResult = doCompare(source_png, loadPngRect, refreshPngRect, new Date());
             stopTestRecord(compareResult.get("loadTime"), compareResult.get("refreshTime"), compareResult.get
                     ("loadResult"), compareResult.get("refreshResult"));
-            SystemClock.sleep(1000);
-            mDevice.wait(Until.hasObject(By.res(Vision.PACKAGE, "vvEyeProtect")), WAIT_TIME);
             mDevice.pressBack();
             SystemClock.sleep(2000);
         }
@@ -129,13 +124,11 @@ public class VisionTestCase extends PerforTestCase {
         SystemClock.sleep(2000);
         for (int i = 0; i < mCount; i++) {
             startTestRecord();
-//            mHelper.longClick(mDevice.getDisplayWidth()/2,mDevice.getDisplayHeight()-30);
             mDevice.click(mDevice.getDisplayWidth() / 2, mDevice.getDisplayHeight() - 30);
             Map<String, String> compareResult = doCompare(source_png, loadPngRect, refreshPngRect, new Date());
             stopTestRecord(compareResult.get("loadTime"), compareResult.get("refreshTime"), compareResult.get
                     ("loadResult"), compareResult.get("refreshResult"));
             SystemClock.sleep(1000);
-            //mDevice.wait(Until.hasObject(By.text("护眼小知识")),WAIT_TIME);
             mDevice.pressBack();
             SystemClock.sleep(2000);
         }
