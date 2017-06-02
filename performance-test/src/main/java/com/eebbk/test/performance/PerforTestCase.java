@@ -54,7 +54,7 @@ public class PerforTestCase extends Automator {
     public void setUp() throws Exception {
         super.setUp();
         clearRunprocess();
-        String count = getArguments().getString("count", "5");
+        String count = getArguments().getString("count", "3");
         String type = getArguments().getString("type", "0");
         mNumber = getArguments().getString("number", "unknown");
         if (TextUtils.isDigitsOnly(count)) {

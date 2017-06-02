@@ -100,7 +100,7 @@ public class VtrainingTestCase extends PerforTestCase {
         Rect loadPngRect = new Rect(rt.left, rt.top, rt.right, rt.bottom);
         mDevice.pressBack();
         for (int i = 0; i < mCount; i++) {
-            mDevice.wait(Until.hasObject(By.res(Vtraining.PACKAGE, "select_course_class_type_view")), WAIT_TIME*2);
+            mDevice.wait(Until.hasObject(By.res(Vtraining.PACKAGE, "select_course_class_type_view")), WAIT_TIME * 2);
             course = mDevice.findObject(By.res(Vtraining.PACKAGE, "select_course_class_type_view"));
             startTestRecord();
             course.click();
@@ -201,12 +201,12 @@ public class VtrainingTestCase extends PerforTestCase {
     @Test
     public void showVtRanking() throws JSONException, FileNotFoundException {
         openVt("我的");
-        mDevice.wait(Until.hasObject(By.res(Vtraining.PACKAGE, "mine_rank_layout")), WAIT_TIME*6);
+        mDevice.wait(Until.hasObject(By.res(Vtraining.PACKAGE, "mine_rank_layout")), WAIT_TIME * 6);
         UiObject2 rank = mDevice.findObject(By.res(Vtraining.PACKAGE, "mine_rank_layout"));
         rank.clickAndWait(Until.newWindow(), WAIT_TIME);
         //排行列表刷新出来
-        mDevice.wait(Until.hasObject(By.res("android", "list")), WAIT_TIME * 6);
-        rank = mDevice.findObject(By.res("android", "list"));
+        mDevice.wait(Until.hasObject(By.res(PackageConstants.Android.PACKAGE, "list")), WAIT_TIME * 6);
+        rank = mDevice.findObject(By.res(PackageConstants.Android.PACKAGE, "list"));
         Rect rtd = rank.getVisibleBounds();//list 包含了整个排行榜页面 可取下半部分刷新界面
         // 排行榜上方 一半是固定的，页面切换即显示，另一半要下面刷新完成重新刷新
         rank = mDevice.findObject(By.res(Vtraining.PACKAGE, "item_week_rank_transparent_view_id"));
@@ -237,16 +237,19 @@ public class VtrainingTestCase extends PerforTestCase {
     @Test
     public void showVtJoinCourse() throws JSONException, FileNotFoundException {
         //mine_setting_layout 列表菜单
-        BySelector by  = By.text("已加入课程");
+        BySelector by = By.text("已加入课程");
         openVt("我的");
         mDevice.wait(Until.hasObject(By.res(Vtraining.PACKAGE, "mine_setting_layout")), WAIT_TIME);
         UiObject2 join = mDevice.findObject(by);
         join.clickAndWait(Until.newWindow(), WAIT_TIME);
-        mDevice.wait(Until.hasObject(By.res(Vtraining.PACKAGE, "title_bar_btn_edit")), WAIT_TIME);
-        join  = mDevice.findObject(By.res(Vtraining.PACKAGE, "title_bar_title_name"));
-        Rect loadPngRect = join.getVisibleBounds();
-        join  = mDevice.findObject(By.res(PackageConstants.Android.PACKAGE, "list"));
+        if (mDevice.wait(Until.hasObject(By.res(Vtraining.PACKAGE, "my_plan_no_plan_tip_id")), WAIT_TIME)) {
+            join = mDevice.findObject(By.res(Vtraining.PACKAGE, "my_plan_no_plan_tip_id"));
+        } else if (mDevice.wait(Until.hasObject(By.res(Vtraining.PACKAGE, "title_bar_btn_edit")), WAIT_TIME * 4)) {
+            join = mDevice.findObject(By.res(PackageConstants.Android.PACKAGE, "list"));
+        }
         Rect refreshPngRect = join.getVisibleBounds();
+        join = mDevice.findObject(By.res(Vtraining.PACKAGE, "title_bar_title_name"));
+        Rect loadPngRect = join.getVisibleBounds();
         Bitmap source_png = mHelper.takeScreenshot(mNumber);
         SystemClock.sleep(2000);
         mDevice.pressBack();
@@ -270,21 +273,24 @@ public class VtrainingTestCase extends PerforTestCase {
     //已下载5个课程，进入我的界面，点击已下载课程→列表内容加载完成
     @Test
     public void showVtDownloadCourse() throws FileNotFoundException, JSONException {
-        BySelector by  = By.text("我的下载");
+        BySelector by = By.text("我的下载");
         openVt("我的");
         mDevice.wait(Until.hasObject(By.res(Vtraining.PACKAGE, "mine_setting_layout")), WAIT_TIME);
         UiObject2 download = mDevice.findObject(by);
         download.clickAndWait(Until.newWindow(), WAIT_TIME);
-        mDevice.wait(Until.hasObject(By.res(Vtraining.PACKAGE, "title_bar_btn_edit")), WAIT_TIME);
-        download  = mDevice.findObject(By.res(Vtraining.PACKAGE, "title_bar_title_name"));
-        Rect loadPngRect = download.getVisibleBounds();
-        download  = mDevice.findObject(By.res(PackageConstants.Android.PACKAGE, "list"));
+        if (mDevice.wait(Until.hasObject(By.res(Vtraining.PACKAGE, "tips_no_download_layout")), WAIT_TIME)) {
+            download = mDevice.findObject(By.res(Vtraining.PACKAGE, "tips_no_download_layout"));
+        } else if (mDevice.wait(Until.hasObject(By.res(Vtraining.PACKAGE, "title_bar_btn_edit")), WAIT_TIME * 2)) {
+            download = mDevice.findObject(By.res(PackageConstants.Android.PACKAGE, "list"));
+        }
         Rect refreshPngRect = download.getVisibleBounds();
+        download = mDevice.findObject(By.res(Vtraining.PACKAGE, "title_bar_title_name"));
+        Rect loadPngRect = download.getVisibleBounds();
         Bitmap source_png = mHelper.takeScreenshot(mNumber);
         SystemClock.sleep(2000);
         mDevice.pressBack();
         for (int i = 0; i < mCount; i++) {
-            mDevice.wait(Until.hasObject(By.res(Vtraining.PACKAGE, "mine_setting_layout")), WAIT_TIME*2);
+            mDevice.wait(Until.hasObject(By.res(Vtraining.PACKAGE, "mine_setting_layout")), WAIT_TIME * 2);
             download = mDevice.findObject(by);
             startTestRecord();
             download.click();
@@ -317,7 +323,7 @@ public class VtrainingTestCase extends PerforTestCase {
         Rect loadPngRect = more.getVisibleBounds();
         more = mDevice.findObject(By.res(Vtraining.PACKAGE, "videoview"));
         Rect refreshPngRect = more.getVisibleBounds();
-        SystemClock.sleep(5000);
+//        SystemClock.sleep(5000);
         Bitmap source_png = mHelper.takeScreenshot(mNumber);
         SystemClock.sleep(2000);
         mDevice.pressBack();
