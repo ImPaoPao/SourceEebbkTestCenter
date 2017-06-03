@@ -62,8 +62,10 @@ public class EnglishTalkTestCase extends PerforTestCase {
         mDevice.waitForIdle();
         Bitmap source_png = mHelper.takeScreenshot(mNumber);
         SystemClock.sleep(2000);
-        Rect loadPngRect = new Rect(0, 0, source_png.getWidth(), 250);
-        Rect refreshPngRect = new Rect(0, 0, source_png.getWidth(), source_png.getHeight());
+        mDevice.wait(Until.hasObject(By.res(EnglishTalk.PACKAGE, "detail_book_top_layout_id")), WAIT_TIME);
+        UiObject2 top  = mDevice.findObject(By.res(EnglishTalk.PACKAGE, "detail_book_top_layout_id"));
+        Rect loadPngRect = top.getVisibleBounds();
+        Rect refreshPngRect = new Rect(0, loadPngRect.bottom, source_png.getWidth(), source_png.getHeight());
         mDevice.pressBack();
         mDevice.waitForIdle();
         for (int i = 0; i < mCount; i++) {
