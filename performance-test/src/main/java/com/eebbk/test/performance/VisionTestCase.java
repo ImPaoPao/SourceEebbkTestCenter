@@ -52,29 +52,30 @@ public class VisionTestCase extends PerforTestCase {
     public void showVisionAnimation() throws FileNotFoundException, JSONException, RemoteException {
         mHelper.openVision();
         SystemClock.sleep(1000);
+        Bitmap source_png =null;
         int rotation = mDevice.getDisplayRotation();
         SystemClock.sleep(3000);
         mDevice.click(mDevice.getDisplayWidth() / 2, mDevice.getDisplayHeight() - 40);
         if (mDevice.getDisplayRotation() != rotation) {
-            Bitmap source_png = mHelper.takeScreenshot(mNumber);
+            source_png = mHelper.takeScreenshot(mNumber);
+        }
+        SystemClock.sleep(1000);
+        Rect loadPngRect = new Rect(0, 0, source_png.getWidth() / 2, source_png.getHeight() / 2);
+        Rect refreshPngRect = loadPngRect;
+        mDevice.pressBack();
+        SystemClock.sleep(1000);
+        for (int i = 0; i < mCount; i++) {
+            startTestRecord();
+            mDevice.click(mDevice.getDisplayWidth() / 2, mDevice.getDisplayHeight() - 40);
+            Map<String, String> compareResult = doCompare(source_png, loadPngRect, refreshPngRect, new Date());
+            stopTestRecord(compareResult.get("loadTime"), compareResult.get("refreshTime"), compareResult.get
+                    ("loadResult"), compareResult.get("refreshResult"));
             SystemClock.sleep(1000);
-            Rect loadPngRect = new Rect(0, 0, source_png.getWidth() / 2, source_png.getHeight() / 2);
-            Rect refreshPngRect = loadPngRect;
             mDevice.pressBack();
             SystemClock.sleep(1000);
-            for (int i = 0; i < mCount; i++) {
-                startTestRecord();
-                mDevice.click(mDevice.getDisplayWidth() / 2, mDevice.getDisplayHeight() - 40);
-                Map<String, String> compareResult = doCompare(source_png, loadPngRect, refreshPngRect, new Date());
-                stopTestRecord(compareResult.get("loadTime"), compareResult.get("refreshTime"), compareResult.get
-                        ("loadResult"), compareResult.get("refreshResult"));
-                SystemClock.sleep(1000);
-                mDevice.pressBack();
-                SystemClock.sleep(1000);
-            }
-            if (!source_png.isRecycled()) {
-                source_png.recycle();
-            }
+        }
+        if (!source_png.isRecycled()) {
+            source_png.recycle();
         }
     }
 

@@ -1,4 +1,4 @@
-package com.eebbk.test.kit;
+package com.eebbk.test.performance;
 
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
@@ -11,25 +11,15 @@ import android.support.test.runner.AndroidJUnit4;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.junit.Before;
-import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.List;
 
-
 @RunWith(AndroidJUnit4.class)
-public class PackageManagerProxy extends ServiceProxy {
-
+public class MemoryTestCase {
     private PackageManager mManager;
-
-    @Before
-    public void setUp() {
+    public void doStartActivity() throws JSONException {
         mManager = InstrumentationRegistry.getTargetContext().getPackageManager();
-    }
-
-    @Test
-    public void getPackageList() throws JSONException {
         String[] categories = {Intent.CATEGORY_LAUNCHER, Intent.CATEGORY_HOME,
                 Intent.CATEGORY_MONKEY};
         JSONObject jobj = new JSONObject();
@@ -56,6 +46,8 @@ public class PackageManagerProxy extends ServiceProxy {
                 }
             }
         }
-        sendResult(jobj);
     }
+
+
+
 }

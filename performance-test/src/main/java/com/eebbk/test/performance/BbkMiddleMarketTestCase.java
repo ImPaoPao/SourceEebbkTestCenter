@@ -1,15 +1,21 @@
 package com.eebbk.test.performance;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 import android.os.SystemClock;
+import android.provider.Settings;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.By;
 import android.support.test.uiautomator.BySelector;
 import android.support.test.uiautomator.UiObject2;
 import android.support.test.uiautomator.UiObjectNotFoundException;
 import android.support.test.uiautomator.Until;
+import android.util.Log;
 
 import com.eebbk.test.common.BitmapHelper;
 import com.eebbk.test.common.PackageConstants.BbkMiddleMarket;
@@ -23,8 +29,11 @@ import org.junit.runner.RunWith;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.Date;
 import java.util.Map;
+
+import static android.support.test.InstrumentationRegistry.getInstrumentation;
 
 @RunWith(AndroidJUnit4.class)
 public class BbkMiddleMarketTestCase extends PerforTestCase {
@@ -263,4 +272,41 @@ public class BbkMiddleMarketTestCase extends PerforTestCase {
         category.click();
         mDevice.wait(Until.hasObject(By.res(BbkMiddleMarket.PACKAGE, "user_icon_id")), WAIT_TIME);
     }
+
+
+    @Test
+    public void onRun() {
+        Context mContext = getInstrumentation().getContext();
+        Settings.Secure.putInt(mContext.getContentResolver(),
+                Settings.Secure.LOCK_PATTERN_ENABLED, 0);
+        SystemClock.sleep(60 * 1000);
+
+        // Set alarm power on
+        long time = System.currentTimeMillis() + 180 * 1000;
+        Intent intent = new Intent(Intent.ACTION_BOOT_COMPLETED);
+        intent.putExtra("seq", 1);
+        PendingIntent pi = PendingIntent.getBroadcast(mContext, 0, intent,
+                PendingIntent.FLAG_CANCEL_CURRENT);
+        AlarmManager alarmManager = (AlarmManager) mContext.getSystemService(
+                Context.ALARM_SERVICE);
+        int type = 8;
+        try {
+            Field field = AlarmManager.class.getField("RTC_POWEROFF_WAKEUP");
+            type = field.getInt(null);
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        alarmManager.set(type, time, pi);
+
+        // Shutdown
+        Log.d("powerof test ", "Performing shutdown...");
+        Intent shutdown = new Intent("android.intent.action.ACTION_REQUEST_SHUTDOWN");
+        shutdown.putExtra("android.intent.extra.KEY_CONFIRM", false);
+        shutdown.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        mContext.startActivity(shutdown);
+
+    }
+
 }
